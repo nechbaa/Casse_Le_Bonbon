@@ -16,6 +16,8 @@
 #define CYAN 3
 #define ROUGE 4
 #define MAGENTA 5
+#define GRIS_CLAIR 7
+#define GRIS_FONCE 8
 #define JAUNE 14
 #define BLANC 15
 
@@ -30,5 +32,7 @@ void initialiserPlateau(char plateau[LIGNES][COLONNES]);
 
 
 void afficherPlateau(char plateau[LIGNES][COLONNES]);
+
+void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax);
 
 #endif
