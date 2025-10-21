@@ -6,8 +6,8 @@
 #include <windows.h>
 #include <time.h>
 
-#define LIGNES 25
-#define COLONNES 45
+#define LIGNES 10
+#define COLONNES 10
 
 // Codes couleurs (texte uniquement)
 #define NOIR 0

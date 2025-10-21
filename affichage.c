@@ -31,13 +31,15 @@ void afficherPlateau(char plateau[LIGNES][COLONNES]) {
     system("cls"); // nettoie la console
 
     // Bordure supérieure
-    printf("+");
-    for (int j = 0; j < COLONNES; j++) printf("-");
-    printf("+\n");
+    char bord_tl = 0xC9;
+    printf("%c",bord_tl);
+    for (int j = 0; j < COLONNES; j++) printf("%c",0xCD);
+    char bord_tr = 0xBB;
+    printf("%c\n",bord_tr);
 
     // Corps du plateau
     for (int i = 0; i < LIGNES; i++) {
-        printf("|");
+        printf("%c",0xBA);
         for (int j = 0; j < COLONNES; j++) {
             switch (plateau[i][j]) {
                 case 'S': Color(JAUNE, NOIR); break;    // Soleil
@@ -50,11 +52,13 @@ void afficherPlateau(char plateau[LIGNES][COLONNES]) {
             printf("%c", plateau[i][j]);
         }
         Color(BLANC, NOIR);
-        printf("|\n");
+        printf("%c\n",0xBA);
     }
 
     // Bordure inférieure
-    printf("+");
-    for (int j = 0; j < COLONNES; j++) printf("-");
-    printf("+\n");
+    char bord_bl = 0xC8;
+    printf("%c",bord_bl);
+    for (int j = 0; j < COLONNES; j++)printf("%c",0xCD);
+    char bord_br = 0xBC;
+    printf("%c",bord_br);
 }
