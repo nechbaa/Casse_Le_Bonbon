@@ -144,40 +144,8 @@ void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
 }
 
 // --- (bientôt) Sélection et échange ---
-void selectionnerItem(char plateau[LIGNES][COLONNES], int x, int y, int *selX, int *selY, int *itemSelectionne) {
-   // si rien n’est sélectionné → on sélectionne cette case
-    if (*itemSelectionne == 0) {
-        *itemSelectionne = 1;
-        *selX = x;
-        *selY = y;
 
-        gotoligcol(y + 1, x + 1);
-        Color(NOIR, VERT); // fond vert pour indiquer la sélection
-        printf("%c", plateau[y][x]);
-        Color(BLANC, NOIR);
-    } 
-    // si on reclique sur la même case → on la désélectionne
-    else if (x == *selX && y == *selY) {
-        *itemSelectionne = 0;
 
-        gotoligcol(y + 1, x + 1);
-        // remettre la couleur normale
-        switch (plateau[y][x]) {
-            case 'S': Color(JAUNE, NOIR); break;
-            case 'F': Color(ROUGE, NOIR); break;
-            case 'P': Color(VERT, NOIR); break;
-            case 'O': Color(CYAN, NOIR); break;
-            case 'M': Color(MAGENTA, NOIR); break;
-            default: Color(BLANC, NOIR); break;
-        }
-        printf("%c", plateau[y][x]);
-        Color(BLANC, NOIR);
-        *selX = -1;
-        *selY = -1;
-    }
-
-    gotoligcol(LIGNES + 3, 0);
-}
 
 void echangerItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2) {
     // sera implémentée plus tard
