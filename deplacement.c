@@ -1,4 +1,5 @@
 #include "deplacement.h"
+#include "jeu.h"
 #include "affichage.h"
 #include <conio.h>    // getch()
 
@@ -54,10 +55,10 @@ void afficherSelection(char plateau[LIGNES][COLONNES], int x, int y, int estSele
 
 
 // --- Déplacement + sélection simple ---
+
+
 void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
-    int x = 0, y = 0;                // position du curseur
-    int selX = -1, selY = -1;        // position du fruit sélectionné
-    int itemSelectionne = 0;         // 0 = rien, 1 = un fruit sélectionné
+    int x = 0, y = 0;
     char touche;
 
     afficherCurseur(x, y, plateau);
@@ -65,80 +66,64 @@ void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
     while (1) {
         touche = getch();
 
-        // efface ancien curseur (si pas sur sélection)
-        if (!(itemSelectionne && x == selX && y == selY))
-            effacerCurseur(x, y, plateau);
+        if (touche == 27) return; // ESC = quitter
 
-        // --- Gestion des touches ---
+        int newX = x, newY = y;
+
+        // --- On efface toujours le curseur avant de bouger ---
+        effacerCurseur(x, y, plateau);
+
+        // --- Gestion des directions ---
         switch (touche) {
-            // === Déplacements ===
-            case 'z': case 'Z': case 72 :
-                if (!itemSelectionne && y > 0) y--;
-                else if (itemSelectionne) {
-                    gotoligcol(LIGNES + 4, 0);
-                    Color(ROUGE, NOIR);
-                    printf("⚠ Tu dois deselectionner le fruit avant de te deplacer ou echanger !");
-                    Color(BLANC, NOIR);
-                }
+            case 'z': case 'Z': case 72:
+                if (y > 0) newY--;
                 break;
-
-            case 's': case 'S': case 80 :
-                if (!itemSelectionne && y < LIGNES - 1) y++;
-                else if (itemSelectionne) {
-                    gotoligcol(LIGNES + 4, 0);
-                    Color(ROUGE, NOIR);
-                    printf("⚠ Tu dois deselectionner le fruit avant de te deplacer ou echanger !");
-                    Color(BLANC, NOIR);
-                }
+            case 's': case 'S': case 80:
+                if (y < LIGNES - 1) newY++;
                 break;
-
-            case 'q': case 'Q': case 75 :
-                if (!itemSelectionne && x > 0) x--;
-                else if (itemSelectionne) {
-                    gotoligcol(LIGNES + 4, 0);
-                    Color(ROUGE, NOIR);
-                    printf("⚠ Tu dois deselectionner le fruit avant de te deplacer ou echanger !");
-                    Color(BLANC, NOIR);
-                }
+            case 'q': case 'Q': case 75:
+                if (x > 0) newX--;
                 break;
-
-            case 'd': case 'D': case 77 :
-                if (!itemSelectionne && x < COLONNES - 1) x++;
-                else if (itemSelectionne) {
-                    gotoligcol(LIGNES + 4, 0);
-                    Color(ROUGE, NOIR);
-                    printf("⚠ Tu dois deselectionner le fruit avant de te deplacer ou echanger !");
-                    Color(BLANC, NOIR);
-                }
+            case 'd': case 'D': case 77:
+                if (x < COLONNES - 1) newX++;
                 break;
-
-            // === Sélection ===
-            case ' ': // ESPACE -> sélection / désélection
-                gotoligcol(LIGNES + 4, 0);
-                printf("                                                                               "); // efface ancien message
-
-                if (itemSelectionne == 0) {
-                    itemSelectionne = 1;
-                    selX = x;
-                    selY = y;
-                    afficherSelection(plateau, selX, selY, 1);
-                } 
-                else if (x == selX && y == selY) {
-                    // désélection du même fruit
-                    itemSelectionne = 0;
-                    selX = selY = -1;
-                    afficherSelection(plateau, x, y, 0);
-                }
+            case ' ':
+                gererActionSelectionOuValidation(plateau, x, y);
                 break;
-
-            // === Quitter ===
-            case 27: // ESC -> quitter
-                gotoligcol(LIGNES + 5, 0);
-                Color(BLANC, NOIR);
-                printf("\n");
-                return;
         }
 
+        // --- Si déplacement du curseur ---
+        if (newX != x || newY != y) {
+            // 🧠 Vérifie si on a un fruit sélectionné
+            if (getSelectionEtat()) {
+                int selX = getSelectionX();
+                int selY = getSelectionY();
+                int distance = abs(newX - selX) + abs(newY - selY);
+
+                if (distance == 1) {
+                    // ✅ Autorisé : le curseur bouge d’une case voisine → tentative d’échange
+                    gererDeplacementAvecSelection(plateau, x, y, newX, newY);
+                    x = newX;
+                    y = newY;
+                } else {
+                    // 🚫 Interdit : trop loin de la sélection
+                    gotoligcol(LIGNES + 4, 0);
+                    Color(ROUGE, NOIR);
+                    printf("⚠ Tu ne peux te déplacer qu'à une case voisine du fruit sélectionné !");
+                    Color(BLANC, NOIR);
+
+                    // On ne bouge pas le curseur
+                    newX = x;
+                    newY = y;
+                }
+            } else {
+                // Aucun fruit sélectionné → déplacement libre
+                x = newX;
+                y = newY;
+            }
+        }
+
+        // --- Affiche le curseur à sa nouvelle position ---
         afficherCurseur(x, y, plateau);
     }
 }

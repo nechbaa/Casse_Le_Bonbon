@@ -1,24 +1,22 @@
-
 #ifndef JEU_H
 #define JEU_H
 
 #include "affichage.h"
 
-// --- Fonctions principales du moteur de jeu ---
+// --- Gestion de la sélection ---
+void gererSelection(char plateau[LIGNES][COLONNES], int x, int y);
+int getSelectionEtat();
+int getSelectionX();
+int getSelectionY();
+void resetSelection();
 
-// Permute deux items si c’est possible (voisins dans la grille)
+// --- Gestion des échanges ---
+void essayerPermutation(char plateau[LIGNES][COLONNES], int x, int y);
+
+// --- Mécanique du jeu ---
 int permuterItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2);
 
-// Vérifie et supprime les groupes de 3+ identiques
-int supprimerGroupes(char plateau[LIGNES][COLONNES]);
-
-// Applique la gravité sur le plateau après suppression
-void appliquerGravite(char plateau[LIGNES][COLONNES]);
-
-// Remplit les vides en haut avec de nouveaux fruits
-void remplirPlateau(char plateau[LIGNES][COLONNES]);
-
-// Fonction globale de stabilisation (boucle complète)
-void stabiliserPlateau(char plateau[LIGNES][COLONNES]);
+void gererActionSelectionOuValidation(char plateau[LIGNES][COLONNES], int x, int y);
+void gererDeplacementAvecSelection(char plateau[LIGNES][COLONNES], int oldX, int oldY, int newX, int newY);
 
 #endif

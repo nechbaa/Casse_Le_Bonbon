@@ -1,4 +1,70 @@
 #include "jeu.h"
+#include "deplacement.h"
+#include "affichage.h"
+
+static int estSelectionne = 0;
+static int tentativeActive = 0;
+static int tmpX, tmpY;
+
+// --- Variables internes à la sélection ---
+static int selX = -1;
+static int selY = -1;
+
+// --- Fonctions d’accès à l’état de sélection ---
+int getSelectionEtat() {
+    return estSelectionne;
+}
+
+int getSelectionX() {
+    return selX;
+}
+
+int getSelectionY() {
+    return selY;
+}
+
+void gererActionSelectionOuValidation(char plateau[LIGNES][COLONNES], int x, int y) {
+    if (!estSelectionne) {
+        estSelectionne = 1;
+        selX = x; selY = y;
+        afficherSelection(plateau, x, y, 1);
+    } 
+    else if (tentativeActive) {
+        // Valide la permutation temporaire
+        afficherSelection(plateau, tmpX, tmpY, 0);
+        estSelectionne = tentativeActive = 0;
+    } 
+    else if (x == selX && y == selY) {
+        // Désélection simple
+        afficherSelection(plateau, x, y, 0);
+        estSelectionne = 0;
+    }
+}
+
+void gererDeplacementAvecSelection(char plateau[LIGNES][COLONNES], int oldX, int oldY, int newX, int newY) {
+    if (!estSelectionne) return;
+
+    if (!tentativeActive) {
+        if (abs(newX - selX) + abs(newY - selY) == 1) {
+            // tentative d’échange
+            permuterItems(plateau, selX, selY, newX, newY);
+            tmpX = newX; tmpY = newY;
+            tentativeActive = 1;
+        } else {
+            // mouvement interdit
+            gotoligcol(LIGNES + 4, 0);
+            Color(ROUGE, NOIR);
+            printf("⚠ Déplacement invalide pendant sélection !");
+            Color(BLANC, NOIR);
+        }
+    } 
+    else if (newX == selX && newY == selY) {
+        // annulation
+        permuterItems(plateau, selX, selY, tmpX, tmpY);
+        tentativeActive = 0;
+    }
+}
+
 
 // --- Fonction de permutation de deux fruits ---
 int permuterItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2) {
