@@ -23,58 +23,101 @@ int getSelectionY() {
     return selY;
 }
 
-void gererActionSelectionOuValidation(char plateau[LIGNES][COLONNES], int x, int y) {
+void gererSelection(char plateau[LIGNES][COLONNES], int x, int y) {
+    // Aucun fruit sélectionné -> on sélectionne la case courante
     if (!estSelectionne) {
         estSelectionne = 1;
         selX = x; selY = y;
-        afficherSelection(plateau, x, y, 1);
-    } 
-    else if (tentativeActive) {
-        // Valide la permutation temporaire
-        afficherSelection(plateau, tmpX, tmpY, 0);
-        estSelectionne = tentativeActive = 0;
-    } 
-    else if (x == selX && y == selY) {
-        // Désélection simple
-        afficherSelection(plateau, x, y, 0);
-        estSelectionne = 0;
+        afficherSelection(plateau, selX, selY, 1); // minuscule
+        gotoligcol(LIGNES + 4, 0);
+        Color(JAUNE, NOIR); printf("Fruit selectionne (%d,%d).", selX, selY); Color(BLANC, NOIR);
+        return;
     }
+
+    // Un fruit est sélectionné
+    if (tentativeActive) {
+        // ESPACE = valider la permutation temporaire
+        // -> remettre les deux cases en “non sélectionné” (maj), vider les états
+        afficherSelection(plateau, selX, selY, 0);   // majuscule
+        afficherSelection(plateau, tmpX, tmpY, 0);   // majuscule
+        estSelectionne = 0;
+        tentativeActive = 0;
+        selX = selY = tmpX = tmpY = -1;
+
+        gotoligcol(LIGNES + 4, 0);
+        Color(VERT, NOIR); afficherMessage("Permutation validee."); Color(BLANC, NOIR);
+        return;
+    }
+
+    // Pas de tentative, on a rappuyé ESPACE sur la même case -> désélection simple
+    if (x == selX && y == selY) {
+        afficherSelection(plateau, selX, selY, 0);   // majuscule
+        estSelectionne = 0;
+        selX = selY = -1;
+
+        gotoligcol(LIGNES + 4, 0);
+        Color(BLANC, NOIR); afficherMessage("Deselection."); 
+        return;
+    }
+
+    // Sinon (sélection active mais pas de tentative et autre case) : on ne fait rien ici.
+    // C’est le déplacement (ZQSD/flèches) qui déclenchera la tentative sur voisin.
 }
 
-void gererDeplacementAvecSelection(char plateau[LIGNES][COLONNES], int oldX, int oldY, int newX, int newY) {
+
+void gererDeplacementAvecSelection(char plateau[LIGNES][COLONNES],int oldX, int oldY, int newX, int newY) {
     if (!estSelectionne) return;
 
+    int distance = abs(newX - selX) + abs(newY - selY);
+
+    // Aucune tentative en cours : on autorise uniquement le déplacement SUR un voisin de (selX,selY)
     if (!tentativeActive) {
-        if (abs(newX - selX) + abs(newY - selY) == 1) {
-            // tentative d’échange
+        if (distance == 1) {
+            // Lancer la permutation temporaire (sel <-> voisin)
             permuterItems(plateau, selX, selY, newX, newY);
+
+            // Visuel : la case d'origine RESTE la sélection (minuscule),
+            //          le voisin doit être en non-sélection (majuscule).
+            afficherSelection(plateau, selX, selY, 1);   // minuscule à l'origine (quel que soit le symbole après swap)
+            afficherSelection(plateau, newX, newY, 0);   // majuscule sur le voisin
+
             tmpX = newX; tmpY = newY;
             tentativeActive = 1;
-        } else {
-            // mouvement interdit
+
             gotoligcol(LIGNES + 4, 0);
-            Color(ROUGE, NOIR);
-            printf("⚠ Déplacement invalide pendant sélection !");
+            Color(JAUNE, NOIR); afficherMessage("Permutation temporaire (%d,%d). Valide avec ESPACE ou reviens a l'origine.", newX, newY);
             Color(BLANC, NOIR);
+        
         }
-    } 
-    else if (newX == selX && newY == selY) {
-        // annulation
-        permuterItems(plateau, selX, selY, tmpX, tmpY);
-        tentativeActive = 0;
+        return;
     }
+
+    // Tentative en cours
+    // 1) Revenir exactement sur la case d’origine -> annuler la permutation temporaire
+    if (distance == 0) {
+        // annuler le swap
+        permuterItems(plateau, selX, selY, tmpX, tmpY);
+
+        // visuel : origine reste sélection (minuscule), voisin redevient non-sélection
+        afficherSelection(plateau, selX, selY, 1);
+        afficherSelection(plateau, tmpX, tmpY, 0);
+
+        tentativeActive = 0;
+        tmpX = tmpY = -1;
+
+        gotoligcol(LIGNES + 4, 0);
+        Color(BLEU, NOIR); afficherMessage("Permutation annulee. Tu peux tenter un autre voisin.");
+        Color(BLANC, NOIR);
+        return;
+    }
+
 }
+
 
 
 // --- Fonction de permutation de deux fruits ---
 int permuterItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2) {
-    // Vérifie que les deux cases sont bien voisines
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-
-    if (!((dx == 0 && (dy == 1 || dy == -1)) || ((dx == 1 || dx == -1) && dy == 0))) {
-        return 0; // pas adjacentes → permutation impossible
-    }
+    
 
     // Échange les deux fruits
     char temp = plateau[y1][x1];

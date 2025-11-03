@@ -1,4 +1,5 @@
 #include "affichage.h"
+#include <stdarg.h>
 
 // --- Fonction pour changer la couleur du texte ---
 void Color(int texte, int fond) {
@@ -76,5 +77,22 @@ void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) 
     gotoligcol(7, COLONNES + 5); printf("Mandarines(M) : %d", nbM);
     gotoligcol(9, COLONNES + 5); printf("Coups max : %d", coupsMax);
 
+    Color(BLANC, NOIR);
+}
+
+
+
+void effacerMessage(void) {
+    gotoligcol(LIGNES + 4, 0);
+    // efface large (adapte si besoin)
+    printf("                                                                                                    ");
+}
+
+void afficherMessage(const char* fmt, ...) {
+    effacerMessage();
+    gotoligcol(LIGNES + 4, 0);
+    va_list ap; va_start(ap, fmt);
+    vprintf(fmt, ap);
+    va_end(ap);
     Color(BLANC, NOIR);
 }

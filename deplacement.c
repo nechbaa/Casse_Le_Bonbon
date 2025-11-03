@@ -14,8 +14,18 @@ void afficherCurseur(int x, int y, char plateau[LIGNES][COLONNES]) {
 // --- Efface le curseur précédent ---
 void effacerCurseur(int x, int y, char plateau[LIGNES][COLONNES]) {
     gotoligcol(y + 1, x + 1);
-    // remettre la couleur de base de la case
-    switch (plateau[y][x]) {
+
+    // si la case est en minuscule -> c'est la sélection : conserver son rendu
+    if (plateau[y][x] >= 'a' && plateau[y][x] <= 'z') {
+        Color(NOIR, VERT);
+        printf("%c", plateau[y][x]);  // laisse la minuscule
+        Color(BLANC, NOIR);
+        return;
+    }
+
+    // sinon, couleur normale selon la lettre MAJ
+    char c = plateau[y][x];
+    switch (c) {
         case 'S': Color(JAUNE, NOIR); break;
         case 'F': Color(ROUGE, NOIR); break;
         case 'P': Color(VERT, NOIR); break;
@@ -23,9 +33,10 @@ void effacerCurseur(int x, int y, char plateau[LIGNES][COLONNES]) {
         case 'M': Color(MAGENTA, NOIR); break;
         default:  Color(BLANC, NOIR); break;
     }
-    printf("%c", plateau[y][x]);
+    printf("%c", c);
     Color(BLANC, NOIR);
 }
+
 
 // --- Affichage visuel de la sélection ---
 void afficherSelection(char plateau[LIGNES][COLONNES], int x, int y, int estSelectionne) {
@@ -88,50 +99,38 @@ void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
                 if (x < COLONNES - 1) newX++;
                 break;
             case ' ':
-                gererActionSelectionOuValidation(plateau, x, y);
+                gererSelection(plateau, x, y);
                 break;
         }
 
-        // --- Si déplacement du curseur ---
-        if (newX != x || newY != y) {
-            // 🧠 Vérifie si on a un fruit sélectionné
-            if (getSelectionEtat()) {
-                int selX = getSelectionX();
-                int selY = getSelectionY();
-                int distance = abs(newX - selX) + abs(newY - selY);
+         // --- Gestion spéciale si un fruit est sélectionné ---
+        if (getSelectionEtat()) {
+            int selX = getSelectionX();
+            int selY = getSelectionY();
+            int distance = abs(newX - selX) + abs(newY - selY);
+        
+            if (distance == 0 || distance == 1) {
+                // 👈 autoriser le RETOUR sur l’origine (pour annuler la tentative)
+                gererDeplacementAvecSelection(plateau, x, y, newX, newY);
+                x = newX; y = newY;
+            }
+            else {
+                // 🚫 Interdit : au-delà d’un voisin
+                afficherMessage("Tu ne peux bouger que d'une case autour du fruit selectionne !");
+                // on ne bouge pas
+                newX = x; newY = y;
+            }
+}
 
-                if (distance == 1) {
-                    // ✅ Autorisé : le curseur bouge d’une case voisine → tentative d’échange
-                    gererDeplacementAvecSelection(plateau, x, y, newX, newY);
-                    x = newX;
-                    y = newY;
-                } else {
-                    // 🚫 Interdit : trop loin de la sélection
-                    gotoligcol(LIGNES + 4, 0);
-                    Color(ROUGE, NOIR);
-                    printf("⚠ Tu ne peux te déplacer qu'à une case voisine du fruit sélectionné !");
-                    Color(BLANC, NOIR);
-
-                    // On ne bouge pas le curseur
-                    newX = x;
-                    newY = y;
-                }
-            } else {
+            
+         else {
                 // Aucun fruit sélectionné → déplacement libre
                 x = newX;
                 y = newY;
             }
-        }
 
         // --- Affiche le curseur à sa nouvelle position ---
         afficherCurseur(x, y, plateau);
     }
 }
 
-// --- (bientôt) Sélection et échange ---
-
-
-
-void echangerItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2) {
-    // sera implémentée plus tard
-}

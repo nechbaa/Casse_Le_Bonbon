@@ -37,4 +37,9 @@ void afficherProgression (int nbS, int nbF, int nbP, int nbO, int nbM, int nbCou
 
 void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax);
 
+void effacerMessage(void);
+
+void afficherMessage(const char* fmt, ...);
+
+
 #endif
