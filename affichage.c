@@ -1,4 +1,5 @@
 #include "affichage.h"
+#include <stdarg.h>
 
 // --- Fonction pour changer la couleur du texte ---
 void Color(int texte, int fond) {
@@ -61,4 +62,37 @@ void afficherPlateau(char plateau[LIGNES][COLONNES]) {
     for (int j = 0; j < COLONNES; j++)printf("%c",0xCD);
     char bord_br = 0xBC;
     printf("%c",bord_br);
+}
+
+
+void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) {
+    Color(BLANC, NOIR);
+    gotoligcol(1, COLONNES + 5);
+    printf("=== CONTRAT ===");
+
+    gotoligcol(3, COLONNES + 5); printf("Soleils   (S) : %d", nbS);
+    gotoligcol(4, COLONNES + 5); printf("Fraises   (F) : %d", nbF);
+    gotoligcol(5, COLONNES + 5); printf("Pommes    (P) : %d", nbP);
+    gotoligcol(6, COLONNES + 5); printf("Oignons   (O) : %d", nbO);
+    gotoligcol(7, COLONNES + 5); printf("Mandarines(M) : %d", nbM);
+    gotoligcol(9, COLONNES + 5); printf("Coups max : %d", coupsMax);
+
+    Color(BLANC, NOIR);
+}
+
+
+
+void effacerMessage(void) {
+    gotoligcol(LIGNES + 4, 0);
+    // efface large (adapte si besoin)
+    printf("                                                                                                    ");
+}
+
+void afficherMessage(const char* fmt, ...) {
+    effacerMessage();
+    gotoligcol(LIGNES + 4, 0);
+    va_list ap; va_start(ap, fmt);
+    vprintf(fmt, ap);
+    va_end(ap);
+    Color(BLANC, NOIR);
 }

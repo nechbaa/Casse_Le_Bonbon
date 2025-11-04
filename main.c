@@ -1,5 +1,6 @@
 #include "affichage.h"
-
+#include "deplacement.h"
+#include "jeu.h"
 #include "regles.h"
 
 int main() {
@@ -14,8 +15,8 @@ int main() {
 
     // Initialisation et affichages
     initialiserPlateau(plateau);
-
     afficherPlateau(plateau);
+    afficherContrat(nbS, nbF, nbP, nbO, nbM, coupsMax);
 
     int n = Suppression(plateau, mask);
     printf("Supprimees = %d (attendu 2)\n", n);
