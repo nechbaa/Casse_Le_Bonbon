@@ -1,4 +1,5 @@
 #include "affichage.h"  // pour LIGNES, COLONNES
+#include "regles.h"
 #include <stdio.h>
 
 // --- Génère un item aléatoire parmi {S,F,P,O,M}
@@ -40,7 +41,7 @@ void Gravite(char plateau[LIGNES][COLONNES]) {
 
         // 2) Remplir le haut avec du random
         for (int row = write; row >= 0; row--) {
-            plateau[row][col] = rndItem();
+            plateau[row][col] = randItem();
         }
     }
 

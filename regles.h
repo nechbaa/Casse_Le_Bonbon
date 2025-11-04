@@ -7,6 +7,8 @@
 
 int Suppression(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES]);
 
+char randItem(void);
+
 void Gravite(char plateau[LIGNES][COLONNES]);
 
 #endif

@@ -1,7 +1,8 @@
 #include "affichage.h"
+#include "regles.h"
 #include "deplacement.h"
 #include "jeu.h"
-#include "regles.h"
+
 
 int main() {
     char plateau[LIGNES][COLONNES];
