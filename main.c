@@ -16,17 +16,20 @@ int main() {
 
     // Initialisation et affichages
     initialiserPlateau(plateau);
-    afficherPlateau(plateau);
-    afficherContrat(nbS, nbF, nbP, nbO, nbM, coupsMax);
+    refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
+
 
     int n = Suppression(plateau, mask);
-    printf("Supprimees = %d (attendu 2)\n", n);
-    afficherPlateau(plateau); // tu dois voir des '.' aux positions testées
+    Gravite(plateau);
 
-// Position explicite sous le plateau
-    gotoligcol(LIGNES + 3, 0);
+
+    gotoligcol(LIGNES + 2, 0);
     Color(BLANC, NOIR);
-    printf("Utilise Z Q S D pour te deplacer, ESPACE pour selectionner, ECHAP pour quitter.\n");
+    printf("Supprimees = %d (attendu 2)\n", n);
+
+ // 4) Réaffichage complet après suppression + gravité
+    refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
+
 
     // Gestion du déplacement uniquement
     deplacerCurseur(plateau);

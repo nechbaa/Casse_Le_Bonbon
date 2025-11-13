@@ -1,6 +1,7 @@
 #include "affichage.h"  // pour LIGNES, COLONNES
 #include "regles.h"
 #include <stdio.h>
+#define VIDE '.'   // definition claire du caractère représentant une case vide
 
 // --- Génère un item aléatoire parmi {S,F,P,O,M}
 char randItem(void) {
@@ -17,7 +18,7 @@ int Suppression(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
     for (int i = 0; i < LIGNES; i++) {
         for (int j = 0; j < COLONNES; j++) {
             if (mask[i][j] == 1) {
-                plateau[i][j] = ' ';
+                plateau[i][j] = VIDE;
                 supprimees++;
             }
         }
@@ -33,7 +34,7 @@ void Gravite(char plateau[LIGNES][COLONNES]) {
 
         // 1) Descendre tous les items non vides
         for (int row = LIGNES - 1; row >= 0; row--) {
-            if (plateau[row][col] != '.') {
+            if (plateau[row][col] != VIDE) {
                 plateau[write][col] = plateau[row][col];
                 write--;
             }
@@ -45,15 +46,4 @@ void Gravite(char plateau[LIGNES][COLONNES]) {
         }
     }
 
-    // 3) Réaffichage du plateau (on fait simple : tout redessiner)
-    for (int i = 0; i < LIGNES; i++) {
-        gotoligcol(i + 1, 1);
-        for (int j = 0; j < COLONNES; j++) {
-            // couleur “neutre” ici; si tu as un affichage coloré par lettre,
-            // tu peux réutiliser le switch de afficherPlateau()
-            Color(BLANC, NOIR);
-            printf("%c", plateau[i][j]);
-        }
-    }
-    Color(BLANC, NOIR);
 }

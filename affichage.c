@@ -96,3 +96,19 @@ void afficherMessage(const char* fmt, ...) {
     va_end(ap);
     Color(BLANC, NOIR);
 }
+
+
+// --- Fonction utilitaire : rafraîchir entièrement l'écran ---
+void refreshScreen(char plateau[LIGNES][COLONNES],int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax)
+{
+    // affiche le plateau (fait déjà un cls)
+    afficherPlateau(plateau);
+
+    // affiche le contrat à droite
+    afficherContrat(nbS, nbF, nbP, nbO, nbM, coupsMax);
+
+    // message d'instructions sous le plateau
+    gotoligcol(LIGNES + 3, 0);
+    Color(BLANC, NOIR);
+    printf("Utilise Z Q S D pour te deplacer, ESPACE pour selectionner, ECHAP pour quitter.\n");
+}
