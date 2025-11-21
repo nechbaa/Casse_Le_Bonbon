@@ -67,39 +67,42 @@ void afficherSelection(char plateau[LIGNES][COLONNES], int x, int y, int estSele
 
 // --- Déplacement + sélection simple ---
 
-
-void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
-    int x = 0, y = 0;
-    char touche;
+void InitialiserCurseur(char plateau[LIGNES][COLONNES])
+{
+    curX = 0; 
+    curY = 0;
 
     afficherCurseur(x, y, plateau);
+}
 
-    while (1) {
+void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
+    
+
         touche = getch();
 
         if (touche == 27) return; // ESC = quitter
 
-        int newX = x, newY = y;
+        int newX = curX, newY = curY;
 
         // --- On efface toujours le curseur avant de bouger ---
-        effacerCurseur(x, y, plateau);
+        effacerCurseur(curX, curY, plateau);
 
         // --- Gestion des directions ---
         switch (touche) {
             case 'z': case 'Z': case 72:
-                if (y > 0) newY--;
+                if (curY > 0) newY--;
                 break;
             case 's': case 'S': case 80:
-                if (y < LIGNES - 1) newY++;
+                if (curY < LIGNES - 1) newY++;
                 break;
             case 'q': case 'Q': case 75:
-                if (x > 0) newX--;
+                if (curX > 0) newX--;
                 break;
             case 'd': case 'D': case 77:
-                if (x < COLONNES - 1) newX++;
+                if (curX < COLONNES - 1) newX++;
                 break;
             case ' ':
-                gererSelection(plateau, x, y);
+                gererSelection(plateau, curX, curY);
                 break;
         }
 
@@ -111,26 +114,25 @@ void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
         
             if (distance == 0 || distance == 1) {
                 // 👈 autoriser le RETOUR sur l’origine (pour annuler la tentative)
-                gererDeplacementAvecSelection(plateau, x, y, newX, newY);
-                x = newX; y = newY;
+                gererDeplacementAvecSelection(plateau, curX, curY, newX, newY);
+                curX = newX; curY = newY;
             }
             else {
                 // 🚫 Interdit : au-delà d’un voisin
                 afficherMessage("Tu ne peux bouger que d'une case autour du fruit selectionne !");
                 // on ne bouge pas
-                newX = x; newY = y;
+                newX = curX; newY = curY;
             }
-}
+        }
 
-            
-         else {
+        else {
                 // Aucun fruit sélectionné → déplacement libre
-                x = newX;
-                y = newY;
-            }
+                curX = newX;
+                curY = newY;
+        }
 
         // --- Affiche le curseur à sa nouvelle position ---
-        afficherCurseur(x, y, plateau);
-    }
+        afficherCurseur(curX, curY, plateau);
+    
 }
 

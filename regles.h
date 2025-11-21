@@ -1,5 +1,5 @@
-#ifndef JEU_H
-#define JEU_H
+#ifndef REGLES_H
+#define REGLES_H
 
 #include "affichage.h"
 
