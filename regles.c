@@ -29,7 +29,7 @@ int Suppression(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
 
 
 // --- Gravité ANIMÉE : les fruits descendent petit à petit ---
-void Gravite(char plateau[LIGNES][COLONNES], int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax)
+void Gravite(char plateau[LIGNES][COLONNES])
 {
     int moved;
 
@@ -48,9 +48,8 @@ void Gravite(char plateau[LIGNES][COLONNES], int nbS, int nbF, int nbP, int nbO,
         }
 
         if (moved) {
-            // On rafraîchit TOUT l'écran : plateau + contrat + messages
-            refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
-            Sleep(200);  // petite pause pour l'effet visuel
+            refreshScreen(plateau);
+            Sleep(120);  // petite pause pour l'effet visuel
         }
 
     } while (moved);
@@ -60,8 +59,8 @@ void Gravite(char plateau[LIGNES][COLONNES], int nbS, int nbF, int nbP, int nbO,
         for (int row = 0; row < LIGNES; row++) {
             if (plateau[row][col] == VIDE) {
                 plateau[row][col] = randItem();
-                refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
-                Sleep(200);
+                refreshScreen(plateau);
+                Sleep(120);
             }
         }
     }
@@ -164,5 +163,30 @@ int TrouverGroupesSimples(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONN
 
     // nbCases = nombre total de cases appartenant à un groupe (H ou V)
     return nbCases;
+}
+
+
+// --- Compter combien de S/F/P/O/M vont être supprimés ---
+void CompterFruitsSupprimes(char plateau[LIGNES][COLONNES],
+                            int mask[LIGNES][COLONNES],
+                            int *nbS, int *nbF, int *nbP, int *nbO, int *nbM)
+{
+    *nbS = *nbF = *nbP = *nbO = *nbM = 0;
+
+    for (int i = 0; i < LIGNES; i++) {
+        for (int j = 0; j < COLONNES; j++) {
+            if (mask[i][j] == 1) {
+                char c = plateau[i][j];
+                switch (c) {
+                    case 'S': (*nbS)++; break;
+                    case 'F': (*nbF)++; break;
+                    case 'P': (*nbP)++; break;
+                    case 'O': (*nbO)++; break;
+                    case 'M': (*nbM)++; break;
+                    default: break;
+                }
+            }
+        }
+    }
 }
 

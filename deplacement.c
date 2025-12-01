@@ -68,6 +68,7 @@ void afficherSelection(char plateau[LIGNES][COLONNES], int x, int y, int estSele
 // --- Déplacement + sélection simple ---
 
 
+// --- Déplacement + sélection ---
 void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
     int x = 0, y = 0;
     char touche;
@@ -75,16 +76,18 @@ void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
     afficherCurseur(x, y, plateau);
 
     while (1) {
+        if (isGameOver()) {
+            return;
+        }
+
         touche = getch();
 
         if (touche == 27) return; // ESC = quitter
 
         int newX = x, newY = y;
 
-        // --- On efface toujours le curseur avant de bouger ---
         effacerCurseur(x, y, plateau);
 
-        // --- Gestion des directions ---
         switch (touche) {
             case 'z': case 'Z': case 72:
                 if (y > 0) newY--;
@@ -103,33 +106,23 @@ void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
                 break;
         }
 
-         // --- Gestion spéciale si un fruit est sélectionné ---
         if (getSelectionEtat()) {
             int selX = getSelectionX();
             int selY = getSelectionY();
             int distance = abs(newX - selX) + abs(newY - selY);
-        
+
             if (distance == 0 || distance == 1) {
-                // 👈 autoriser le RETOUR sur l’origine (pour annuler la tentative)
                 gererDeplacementAvecSelection(plateau, x, y, newX, newY);
                 x = newX; y = newY;
-            }
-            else {
-                // 🚫 Interdit : au-delà d’un voisin
+            } else {
                 afficherMessage("Tu ne peux bouger que d'une case autour du fruit selectionne !");
-                // on ne bouge pas
                 newX = x; newY = y;
             }
-}
+        } else {
+            x = newX;
+            y = newY;
+        }
 
-            
-         else {
-                // Aucun fruit sélectionné → déplacement libre
-                x = newX;
-                y = newY;
-            }
-
-        // --- Affiche le curseur à sa nouvelle position ---
         afficherCurseur(x, y, plateau);
     }
 }

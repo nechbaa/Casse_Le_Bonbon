@@ -1,4 +1,5 @@
 #include "affichage.h"
+#include "jeu.h"
 #include <stdarg.h>
 
 // --- Fonction pour changer la couleur du texte ---
@@ -64,37 +65,51 @@ void afficherPlateau(char plateau[LIGNES][COLONNES]) {
     printf("%c",bord_br);
 }
 
-void afficherProgression(int nbS, int nbF, int nbP, int nbO, int nbM, int coups) {
+// --- Affiche la progression par fruit + coups utilisés ---
+void afficherProgression(void) {
+    int pS = getProgS();
+    int pF = getProgF();
+    int pP = getProgP();
+    int pO = getProgO();
+    int pM = getProgM();
+    int coups = getCoupsUtilises();
+
     Color(BLANC, NOIR);
     gotoligcol(1, COLONNES + 5);
     printf("=== PROGRESSION ===");
 
-    gotoligcol(3, COLONNES + 5); printf("Soleils   (S) : %d", nbS);
-    gotoligcol(4, COLONNES + 5); printf("Fraises   (F) : %d", nbF);
-    gotoligcol(5, COLONNES + 5); printf("Pommes    (P) : %d", nbP);
-    gotoligcol(6, COLONNES + 5); printf("Oignons   (O) : %d", nbO);
-    gotoligcol(7, COLONNES + 5); printf("Mandarines(M) : %d", nbM);
-    gotoligcol(9, COLONNES + 5); printf("Coups max : %d", coups);
+    gotoligcol(3, COLONNES + 5); printf("Soleils   (S) : %d", pS);
+    gotoligcol(4, COLONNES + 5); printf("Fraises   (F) : %d", pF);
+    gotoligcol(5, COLONNES + 5); printf("Pommes    (P) : %d", pP);
+    gotoligcol(6, COLONNES + 5); printf("Oignons   (O) : %d", pO);
+    gotoligcol(7, COLONNES + 5); printf("Mandarines(M) : %d", pM);
+    gotoligcol(9, COLONNES + 5); printf("Coups joues : %d", coups);
 
     Color(BLANC, NOIR);
 }
 
+// --- Affiche le contrat (objectifs) ---
+void afficherContrat(void) {
+    int nbS = getContratS();
+    int nbF = getContratF();
+    int nbP = getContratP();
+    int nbO = getContratO();
+    int nbM = getContratM();
+    int coupsMax = getCoupsMax();
 
-void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) {
     Color(BLANC, NOIR);
-    gotoligcol(1, COLONNES + 22);
+    gotoligcol(1, COLONNES + 28);
     printf("=== CONTRAT ===");
 
-    gotoligcol(3, COLONNES + 22); printf("Soleils   (S) : %d", nbS);
-    gotoligcol(4, COLONNES + 22); printf("Fraises   (F) : %d", nbF);
-    gotoligcol(5, COLONNES + 22); printf("Pommes    (P) : %d", nbP);
-    gotoligcol(6, COLONNES + 22); printf("Oignons   (O) : %d", nbO);
-    gotoligcol(7, COLONNES + 22); printf("Mandarines(M) : %d", nbM);
-    gotoligcol(9, COLONNES + 22); printf("Coups max : %d", coupsMax);
+    gotoligcol(3, COLONNES + 28); printf("Soleils   (S) : %d", nbS);
+    gotoligcol(4, COLONNES + 28); printf("Fraises   (F) : %d", nbF);
+    gotoligcol(5, COLONNES + 28); printf("Pommes    (P) : %d", nbP);
+    gotoligcol(6, COLONNES + 28); printf("Oignons   (O) : %d", nbO);
+    gotoligcol(7, COLONNES + 28); printf("Mandarines(M) : %d", nbM);
+    gotoligcol(9, COLONNES + 28); printf("Coups max : %d", coupsMax);
 
     Color(BLANC, NOIR);
 }
-
 
 
 void effacerMessage(void) {
@@ -114,15 +129,12 @@ void afficherMessage(const char* fmt, ...) {
 
 
 // --- Fonction utilitaire : rafraîchir entièrement l'écran ---
-void refreshScreen(char plateau[LIGNES][COLONNES],int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax)
+void refreshScreen(char plateau[LIGNES][COLONNES])
 {
-    // affiche le plateau (fait déjà un cls)
     afficherPlateau(plateau);
+    afficherProgression();
+    afficherContrat();
 
-    // affiche le contrat à droite
-    afficherContrat(nbS, nbF, nbP, nbO, nbM, coupsMax);
-
-    // message d'instructions sous le plateau
     gotoligcol(LIGNES + 3, 0);
     Color(BLANC, NOIR);
     printf("Utilise Z Q S D pour te deplacer, ESPACE pour selectionner, ECHAP pour quitter.\n");
