@@ -9,3 +9,8 @@ static inline void Color(int texte, int fond) {
     if (!H) H = GetStdHandle(STD_OUTPUT_HANDLE); // évite de rappeler GetStdHandle à chaque fois
     SetConsoleTextAttribute(H, (fond << 4) | texte);
 }
+// --- Fonction pour déplacer le curseur ---
+static inline void gotoligcol(int lig, int col) {
+    COORD mycoord = { (SHORT)col, (SHORT)lig };
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), mycoord);
+}
