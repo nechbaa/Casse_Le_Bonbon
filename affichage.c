@@ -14,3 +14,14 @@ static inline void gotoligcol(int lig, int col) {
     COORD mycoord = { (SHORT)col, (SHORT)lig };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), mycoord);
 }
+// --- Initialisation aléatoire du plateau ---
+void initialiserPlateau(char plateau[LIGNES][COLONNES]) {
+    static const char items[] = {'S', 'F', 'P', 'O', 'M'};
+    srand((unsigned)time(NULL));
+
+    for (int i = 0; i < LIGNES; i++) {
+        for (int j = 0; j < COLONNES; j++) {
+            plateau[i][j] = items[rand() % (sizeof(items)/sizeof(items[0]))];
+        }
+    }
+}
