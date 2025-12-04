@@ -60,3 +60,27 @@ void afficherPlateau(char plateau[LIGNES][COLONNES]) {
     for (int j = 0; j < COLONNES; j++) putchar(0xCD);
     putchar(0xBC);
 }
+// --- Affichage du contrat ---
+void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) {
+    Color(BLANC, NOIR);
+    gotoligcol(1, COLONNES + 5);
+    printf("=== CONTRAT ===");
+
+    const char* labels[] = {
+        "Soleils   (S) : %d",
+        "Fraises   (F) : %d",
+        "Pommes    (P) : %d",
+        "Oignons   (O) : %d",
+        "Mandarines(M) : %d"
+    };
+    int values[] = { nbS, nbF, nbP, nbO, nbM };
+
+    for (int i = 0; i < 5; i++) {
+        gotoligcol(3 + i, COLONNES + 5);
+        printf(labels[i], values[i]);
+    }
+
+    gotoligcol(9, COLONNES + 5);
+    printf("Coups max : %d", coupsMax);
+    Color(BLANC, NOIR);
+}
