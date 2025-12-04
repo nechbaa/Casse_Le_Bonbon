@@ -25,3 +25,38 @@ void initialiserPlateau(char plateau[LIGNES][COLONNES]) {
         }
     }
 }
+
+// --- Affichage coloré du plateau ---
+void afficherPlateau(char plateau[LIGNES][COLONNES]) {
+    system("cls"); // nettoyage console
+
+    // Bordure supérieure
+    putchar(0xC9);
+    for (int j = 0; j < COLONNES; j++) putchar(0xCD);
+    putchar(0xBB);
+    putchar('\n');
+
+    // Corps du plateau
+    for (int i = 0; i < LIGNES; i++) {
+        putchar(0xBA);
+        for (int j = 0; j < COLONNES; j++) {
+            switch (plateau[i][j]) {
+                case 'S': Color(JAUNE, NOIR); break;
+                case 'F': Color(ROUGE, NOIR); break;
+                case 'P': Color(VERT, NOIR); break;
+                case 'O': Color(CYAN, NOIR); break;
+                case 'M': Color(MAGENTA, NOIR); break;
+                default:  Color(BLANC, NOIR); break;
+            }
+            putchar(plateau[i][j]);
+        }
+        Color(BLANC, NOIR);
+        putchar(0xBA);
+        putchar('\n');
+    }
+
+    // Bordure inférieure
+    putchar(0xC8);
+    for (int j = 0; j < COLONNES; j++) putchar(0xCD);
+    putchar(0xBC);
+}
