@@ -85,7 +85,16 @@ void effacerMessage(void) {
     gotoligcol(LIGNES + 4, 0);
     printf("%*s", 100, ""); // efface 100 caractères
 }
-
+// --- Afficher message ---
+void afficherMessage(const char* fmt, ...) {
+    effacerMessage();
+    gotoligcol(LIGNES + 4, 0);
+    va_list ap; va_start(ap, fmt);
+    vprintf(fmt, ap);
+    va_end(ap);
+    Color(BLANC, NOIR);
+}
+    
     gotoligcol(9, COLONNES + 5);
     printf("Coups max : %d", coupsMax);
     Color(BLANC, NOIR);
