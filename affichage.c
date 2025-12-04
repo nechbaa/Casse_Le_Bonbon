@@ -80,6 +80,12 @@ void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) 
         printf(labels[i], values[i]);
     }
 
+    // --- Effacer message ---
+void effacerMessage(void) {
+    gotoligcol(LIGNES + 4, 0);
+    printf("%*s", 100, ""); // efface 100 caractères
+}
+
     gotoligcol(9, COLONNES + 5);
     printf("Coups max : %d", coupsMax);
     Color(BLANC, NOIR);
