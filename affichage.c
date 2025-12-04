@@ -99,3 +99,13 @@ void afficherMessage(const char* fmt, ...) {
     printf("Coups max : %d", coupsMax);
     Color(BLANC, NOIR);
 }
+// --- Rafraîchir écran ---
+void refreshScreen(char plateau[LIGNES][COLONNES],
+                   int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) {
+    afficherPlateau(plateau);
+    afficherContrat(nbS, nbF, nbP, nbO, nbM, coupsMax);
+
+    gotoligcol(LIGNES + 3, 0);
+    Color(BLANC, NOIR);
+    puts("Utilise Z Q S D pour te deplacer, ESPACE pour selectionner, ECHAP pour quitter.");
+}
