@@ -6,7 +6,7 @@
 // --- Recherche des groupes horizontaux / verticaux de taille >= 3 ---
 // Remplit mask à 1 sur toutes les cases appartenant à un groupe.
 // Retourne le nombre total de cases marquées (score de base).
-int TrouverGroupesSimples(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
+int TrouverGroupes(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
 {
     // 0) Réinitialiser le masque : au départ, aucune case n'est marquée
     for (int i = 0; i < LIGNES; i++) {
@@ -15,6 +15,9 @@ int TrouverGroupesSimples(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONN
         }
     }
 
+    gotoligcol(LIGNES + 6, 0);
+    printf("Test1");
+
     int nbCases = 0;  // compteur global de cases à supprimer
 
     char deleteAll[5];
@@ -22,14 +25,24 @@ int TrouverGroupesSimples(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONN
     // Horizontaux
     nbCases += TrouverGroupesHorizontaux(plateau, mask, deleteAll);
 
+    gotoligcol(LIGNES + 7, 0);
+    printf("Test2 %d", nbCases);
+
     // Groupes Verticaux
     nbCases += TrouverGroupesVerticaux(plateau, mask, deleteAll);
+
+    gotoligcol(LIGNES + 8, 0);
+    printf("Test3 %d", nbCases);
 
     int i = 0;
     while (deleteAll[i] != '\0')
     {
         nbCases += DeleteAllFruit(plateau, mask, deleteAll[i]);
+        i++;
     }
+
+    gotoligcol(LIGNES + 9, 0);
+    printf("Test4 %d", nbCases);
     
     // nbCases = nombre total de cases appartenant à un groupe (H ou V)
     return nbCases;

@@ -2,6 +2,7 @@
 #include "affichage.h"
 #include "regles.h"
 #include "deplacement.h"
+#include "groupes.h"
 #include "jeu.h"
 #include <stdio.h>
 
@@ -24,11 +25,16 @@ int main() {
 
     while (1)
     {
-        int supprimees = Suppression(plateau, mask);
-        Gravite(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
-        //TrouverGroupesSimples(plateau,mask);
-        refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
-        deplacerCurseur(plateau);
+        int supprimees = 0;
+        /*while(TrouverGroupes(plateau,mask) > 0)
+        {
+            int a = TrouverGroupes(plateau,mask);
+            gotoligcol(LIGNES + 5, 0);
+            printf("Groupes trouves : %d\n", a);
+            supprimees += Suppression(plateau, mask);
+            Gravite(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
+        }*/
+        if(deplacerCurseur(plateau) == 1) return 0;
     }
     
     return 0;
