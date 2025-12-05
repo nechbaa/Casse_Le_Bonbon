@@ -5,18 +5,33 @@
 
 // --- Gestion de la sélection ---
 void gererSelection(char plateau[LIGNES][COLONNES], int x, int y);
-int getSelectionEtat();
-int getSelectionX();
-int getSelectionY();
-void resetSelection();
+int  getSelectionEtat(void);
+int  getSelectionX(void);
+int  getSelectionY(void);
+void resetSelection(void);
 
 // --- Gestion des échanges ---
-void essayerPermutation(char plateau[LIGNES][COLONNES], int x, int y);
+int  permuterItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2);
+void gererDeplacementAvecSelection(char plateau[LIGNES][COLONNES],
+                                   int oldX, int oldY, int newX, int newY);
 
-// --- Mécanique du jeu ---
-int permuterItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2);
+// --- État de jeu global (contrat, progression, coups) ---
+void initGameState(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax);
 
-void gererActionSelectionOuValidation(char plateau[LIGNES][COLONNES], int x, int y);
-void gererDeplacementAvecSelection(char plateau[LIGNES][COLONNES], int oldX, int oldY, int newX, int newY);
+int  getContratS(void);
+int  getContratF(void);
+int  getContratP(void);
+int  getContratO(void);
+int  getContratM(void);
+int  getCoupsMax(void);
+
+int  getProgS(void);
+int  getProgF(void);
+int  getProgP(void);
+int  getProgO(void);
+int  getProgM(void);
+int  getCoupsUtilises(void);
+
+int  isGameOver(void);   // 1 si partie terminée (défaite ou victoire), 0 sinon
 
 #endif

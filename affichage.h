@@ -23,25 +23,17 @@
 
 // Prototypes
 void Color(int texte, int fond);
-
-
 void gotoligcol(int lig, int col);
 
-
 void initialiserPlateau(char plateau[LIGNES][COLONNES]);
-
-
 void afficherPlateau(char plateau[LIGNES][COLONNES]);
 
-void afficherProgression (int nbS, int nbF, int nbP, int nbO, int nbM, int nbCoups);
-
-void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax);
+void afficherProgression(void);
+void afficherContrat(void);
 
 void effacerMessage(void);
-
 void afficherMessage(const char* fmt, ...);
 
-void refreshScreen(char plateau[LIGNES][COLONNES],int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax);
-
+void refreshScreen(char plateau[LIGNES][COLONNES]);
 
 #endif
