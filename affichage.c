@@ -18,12 +18,27 @@ void gotoligcol(int lig, int col) {
 
 // --- Initialisation aléatoire du plateau ---
 void initialiserPlateau(char plateau[LIGNES][COLONNES]) {
-    char items[] = {'S', 'F', 'P', 'O', 'M'};
     srand(time(NULL));
+
+    int newMask[LIGNES][COLONNES] = {0};
 
     for (int i = 0; i < LIGNES; i++) {
         for (int j = 0; j < COLONNES; j++) {
-            plateau[i][j] = items[rand() % 5];
+            newMask[i][j] = 1;
+        }
+    }
+
+    remplirPlateau(plateau, newMask);
+}
+
+// --- Remplissage du tableau avec le mask ---
+void remplirPlateau(char plateau[LIGNES][COLONNES], int mask[LIGNES][COLONNES]) {
+    char items[] = {'S', 'F', 'P', 'O', 'M'};
+
+    for (int i = 0; i < LIGNES; i++) {
+        for (int j = 0; j < COLONNES; j++) {
+            if(mask[i][j] == 1)
+                plateau[i][j] = items[rand() % 5];
         }
     }
 }
@@ -55,12 +70,13 @@ void afficherPlateau(char plateau[LIGNES][COLONNES]) {
         }
         Color(BLANC, NOIR);
         printf("%c\n",0xBA);
+        
     }
 
     // Bordure inférieure
     char bord_bl = 0xC8;
     printf("%c",bord_bl);
-    for (int j = 0; j < COLONNES; j++)printf("%c",0xCD);
+    for (int j = 0; j < COLONNES; j++) printf("%c",0xCD);
     char bord_br = 0xBC;
     printf("%c",bord_br);
 }

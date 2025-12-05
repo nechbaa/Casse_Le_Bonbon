@@ -15,9 +15,6 @@ int TrouverGroupes(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
         }
     }
 
-    gotoligcol(LIGNES + 6, 0);
-    printf("Test1");
-
     int nbCases = 0;  // compteur global de cases à supprimer
 
     char deleteAll[5];
@@ -25,14 +22,8 @@ int TrouverGroupes(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
     // Horizontaux
     nbCases += TrouverGroupesHorizontaux(plateau, mask, deleteAll);
 
-    gotoligcol(LIGNES + 7, 0);
-    printf("Test2 %d", nbCases);
-
     // Groupes Verticaux
     nbCases += TrouverGroupesVerticaux(plateau, mask, deleteAll);
-
-    gotoligcol(LIGNES + 8, 0);
-    printf("Test3 %d", nbCases);
 
     int i = 0;
     while (deleteAll[i] != '\0')
@@ -41,9 +32,6 @@ int TrouverGroupes(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
         i++;
     }
 
-    gotoligcol(LIGNES + 9, 0);
-    printf("Test4 %d", nbCases);
-    
     // nbCases = nombre total de cases appartenant à un groupe (H ou V)
     return nbCases;
 }
@@ -75,13 +63,13 @@ int TrouverGroupesHorizontaux(char plateau[LIGNES][COLONNES],int mask[LIGNES][CO
 
             int len = k - j;   // longueur du groupe
 
-            // Si on a au moins 6 symboles consécutifs -> groupe valide
-            if (len > 5) {
+            // Si on a au moins 5 symboles consécutifs -> groupe valide
+            if (len >= 5) {
 
                 // ajoute le fruit pour les supprimer tous
                 FillIfNotContain(deleteAll, c);
 
-                k = j + 6; // on ne garde que les 6 premiers
+                k = j + 5; // on ne garde que les 5 premiers
                 // On marque toutes les cases du groupe dans mask
                 for (int col = j; col < k; col++) {
                     // On ne recompte pas deux fois la même case :
@@ -93,9 +81,9 @@ int TrouverGroupesHorizontaux(char plateau[LIGNES][COLONNES],int mask[LIGNES][CO
                     }
                 }
             }
-            else if(len > 3) // Si on en a 4
+            else if(len >= 3) // Si on en a 3 ou 4
             {
-                k = j + 4; // on ne garde que les 4 premiers
+                k = j + len; // on ne garde que les 3 ou 4 premiers
                 // On marque toutes les cases du groupe dans mask
                 for (int col = j; col < k; col++) {
                     // On ne recompte pas deux fois la même case :
@@ -144,7 +132,7 @@ int TrouverGroupesVerticaux(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLO
             int len = k - i;   // longueur du groupe
 
             // Si on a au moins 6 symboles consécutifs -> groupe valide
-            if (len > 5) {
+            if (len >= 6) {
 
                 FillIfNotContain(deleteAll, c);
 
@@ -159,8 +147,8 @@ int TrouverGroupesVerticaux(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLO
                     }
                 }
             }
-            else if (len > 3) {
-                k = i + 4;
+            else if (len >= 3) {
+                k = i + len;
 
                 // On marque toutes les cases du groupe dans mask
                 for (int lig = i; lig < k; lig++) {

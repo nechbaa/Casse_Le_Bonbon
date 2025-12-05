@@ -9,6 +9,7 @@
 
 
 int main() {
+
     char plateau[LIGNES][COLONNES];
     int mask[LIGNES][COLONNES] = {0};
 
@@ -17,6 +18,16 @@ int main() {
 
     // 1) Initialisation + premier affichage complet
     initialiserPlateau(plateau);
+
+    int nbGroupes = TrouverGroupes(plateau,mask);
+
+    while (nbGroupes > 0)
+    {
+        remplirPlateau(plateau,mask);
+        nbGroupes = TrouverGroupes(plateau,mask);
+    }
+    
+
     initGameState(nbS,nbF,nbP,nbO,nbM,coupsMax);
     refreshScreen(plateau);
     Sleep(1000);
@@ -35,8 +46,10 @@ int main() {
             supprimees += Suppression(plateau, mask);
             Gravite(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
         }*/
-        if(deplacerCurseur(plateau) == 1) return 0;
+        if(deplacerCurseur(plateau) == 1) break;
     }
     
+    gotoligcol(LIGNES + 5, 0);
+
     return 0;
 }

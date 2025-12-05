@@ -50,7 +50,7 @@ void Gravite(char plateau[LIGNES][COLONNES])
         if (moved) {
             // On rafraîchit TOUT l'écran : plateau + contrat + messages
             refreshScreen(plateau);
-            Sleep(200);  // petite pause pour l'effet visuel
+            Sleep(50);  // petite pause pour l'effet visuel
         }
 
     } while (moved);
@@ -61,7 +61,7 @@ void Gravite(char plateau[LIGNES][COLONNES])
             if (plateau[row][col] == VIDE) {
                 plateau[row][col] = randItem();
                 refreshScreen(plateau);
-                Sleep(200);
+                Sleep(50);
             }
         }
     }

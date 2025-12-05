@@ -80,7 +80,7 @@ void InitialiserCurseur(char plateau[LIGNES][COLONNES])
 }
 
 // --- Déplacement + sélection ---
-void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
+int deplacerCurseur(char plateau[LIGNES][COLONNES]) {
     
 
         touche = getch();
