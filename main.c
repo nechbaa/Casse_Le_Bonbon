@@ -16,6 +16,7 @@ int main() {
 
     // 1) Initialisation + premier affichage complet
     initialiserPlateau(plateau);
+    initGameState(nbS,nbF,nbP,nbO,nbM,coupsMax);
     refreshScreen(plateau);
     Sleep(1000);
    
