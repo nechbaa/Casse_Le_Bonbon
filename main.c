@@ -26,6 +26,7 @@ int main() {
     {
         int supprimees = Suppression(plateau, mask);
         Gravite(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
+        //TrouverGroupesSimples(plateau,mask);
         refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
         deplacerCurseur(plateau);
     }

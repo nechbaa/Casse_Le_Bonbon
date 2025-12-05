@@ -2,7 +2,7 @@
 #define REGLES_H
 
 #include "affichage.h"
-
+#define VIDE '.' 
 
 
 int Suppression(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES]);

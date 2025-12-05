@@ -72,7 +72,7 @@ void InitialiserCurseur(char plateau[LIGNES][COLONNES])
     curX = 0; 
     curY = 0;
 
-    afficherCurseur(x, y, plateau);
+    afficherCurseur(curX, curY, plateau);
 }
 
 void deplacerCurseur(char plateau[LIGNES][COLONNES]) {

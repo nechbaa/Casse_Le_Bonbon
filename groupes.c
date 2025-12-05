@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "regles.h"
 #include "affichage.h"  // pour LIGNES, COLONNES
 #include "groupes.h"
 
