@@ -3,6 +3,10 @@
 #include "affichage.h"
 #include <conio.h>    // getch()
 
+int curX = 0;
+int curY = 0;
+char touche = 0;
+
 // --- Affiche le plateau avec le curseur en (x, y) ---
 void afficherCurseur(int x, int y, char plateau[LIGNES][COLONNES]) {
     gotoligcol(y + 1, x + 1); // +1 car bordures en haut/gauche
@@ -76,12 +80,12 @@ void InitialiserCurseur(char plateau[LIGNES][COLONNES])
 }
 
 // --- Déplacement + sélection ---
-void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
+int deplacerCurseur(char plateau[LIGNES][COLONNES]) {
     
 
         touche = getch();
 
-        if (touche == 27) return; // ESC = quitter
+        if (touche == 27) return 1; // ESC = quitter
 
         int newX = curX, newY = curY;
 
@@ -112,12 +116,10 @@ void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
             int distance = abs(newX - selX) + abs(newY - selY);
 
             if (distance == 0 || distance == 1) {
-                // 👈 autoriser le RETOUR sur l’origine (pour annuler la tentative)
                 gererDeplacementAvecSelection(plateau, curX, curY, newX, newY);
                 curX = newX; curY = newY;
             }
             else {
-                // 🚫 Interdit : au-delà d’un voisin
                 afficherMessage("Tu ne peux bouger que d'une case autour du fruit selectionne !");
                 // on ne bouge pas
                 newX = curX; newY = curY;
@@ -132,6 +134,7 @@ void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
 
         // --- Affiche le curseur à sa nouvelle position ---
         afficherCurseur(curX, curY, plateau);
+    return 0;
     
 }
 

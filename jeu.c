@@ -2,6 +2,7 @@
 #include "deplacement.h"
 #include "regles.h"
 #include "affichage.h"
+#include "groupes.h"
 
 static int estSelectionne = 0;
 static int tentativeActive = 0;
@@ -84,32 +85,41 @@ void resetSelection() {
 // =============================
 
 static void appliquerCoupApresPermutation(char plateau[LIGNES][COLONNES]) {
-    int mask[LIGNES][COLONNES];
-    int nbCases = TrouverGroupesSimples(plateau, mask);
+    int mask[LIGNES][COLONNES] = {0};
+    int nbCases = 0;
 
     // On compte le coup même si aucun groupe n'est formé
     g_coupsUtilises++;
 
-    if (nbCases > 0) {
-        int nbS = 0, nbF = 0, nbP = 0, nbO = 0, nbM = 0;
+    do{
+        memset(mask, 0, sizeof(mask));
+        nbCases = TrouverGroupes(plateau, mask);
 
-        // Compter combien de S/F/P/O/M vont être mangés
-        CompterFruitsSupprimes(plateau, mask, &nbS, &nbF, &nbP, &nbO, &nbM);
+        if (nbCases > 0) {
+            int nbS = 0, nbF = 0, nbP = 0, nbO = 0, nbM = 0;
 
-        g_progS += nbS;
-        g_progF += nbF;
-        g_progP += nbP;
-        g_progO += nbO;
-        g_progM += nbM;
+            // Compter combien de S/F/P/O/M vont être mangés
+            CompterFruitsSupprimes(plateau, mask, &nbS, &nbF, &nbP, &nbO, &nbM);
 
-        // Supprimer et appliquer la gravité (avec animation + refresh)
-        Suppression(plateau, mask);
-        Gravite(plateau);
-    } else {
-        // Aucun groupe formé
-        afficherMessage("Aucun groupe forme.");
-        refreshScreen(plateau);  // pour mettre à jour coups utilisés
-    }
+            g_progS += nbS;
+            g_progF += nbF;
+            g_progP += nbP;
+            g_progO += nbO;
+            g_progM += nbM;
+
+            // Supprimer et appliquer la gravité (avec animation + refresh)
+            Suppression(plateau, mask);
+            Gravite(plateau);
+        } 
+        else {
+            // Aucun groupe formé
+            afficherMessage("Aucun groupe forme.");
+            refreshScreen(plateau);  // pour mettre à jour coups utilisés
+        }
+
+    }while(nbCases > 0);
+
+    
 
     // Vérification fin de partie (défaite simple : plus de coups)
     if (g_coupsUtilises >= g_coupsMax) {

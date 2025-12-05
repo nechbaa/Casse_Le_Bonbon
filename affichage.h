@@ -26,6 +26,7 @@ void Color(int texte, int fond);
 void gotoligcol(int lig, int col);
 
 void initialiserPlateau(char plateau[LIGNES][COLONNES]);
+void remplirPlateau(char plateau[LIGNES][COLONNES], int mask[LIGNES][COLONNES]);
 void afficherPlateau(char plateau[LIGNES][COLONNES]);
 
 void afficherProgression(void);
