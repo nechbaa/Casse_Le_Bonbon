@@ -13,11 +13,12 @@ int main() {
     int mask[LIGNES][COLONNES] = {0};
 
     // Paramètres du contrat
-    int nbS = 20, nbF = 50, nbP = 20, nbO = 0, nbM = 0, coupsMax = 30;
+    int nbS = 20, nbF = 50, nbP = 20, nbO = 0, nbM = 0, coupsMax = 20;
 
     // 1) Initialisation + premier affichage complet
     initialiserPlateau(plateau);
-    refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
+    initGameState(nbS,nbF,nbP,nbO,nbM,coupsMax);
+    refreshScreen(plateau);
     Sleep(1000);
    
 

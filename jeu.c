@@ -1,5 +1,6 @@
 #include "jeu.h"
 #include "deplacement.h"
+#include "regles.h"
 #include "affichage.h"
 
 static int estSelectionne = 0;
@@ -9,6 +10,54 @@ static int tmpX, tmpY;
 // --- Variables internes à la sélection ---
 static int selX = -1;
 static int selY = -1;
+
+
+// --- État de jeu global ---
+// Objectifs (contrat) _g pour getter 
+static int g_objS = 0, g_objF = 0, g_objP = 0, g_objO = 0, g_objM = 0;
+static int g_coupsMax = 0;
+
+// Progression (fruits mangés)
+static int g_progS = 0, g_progF = 0, g_progP = 0, g_progO = 0, g_progM = 0;
+
+// Coups utilisés
+static int g_coupsUtilises = 0;
+
+// Indicateur de fin de partie
+static int g_gameOver = 0;
+
+
+// =====================
+// Getters état de jeu
+// =====================
+
+void initGameState(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) {
+    g_objS = nbS;  g_objF = nbF;  g_objP = nbP;  g_objO = nbO;  g_objM = nbM;
+    g_coupsMax = coupsMax;
+
+    g_progS = g_progF = g_progP = g_progO = g_progM = 0;
+    g_coupsUtilises = 0;
+    g_gameOver = 0;
+}
+
+int getContratS(void) { return g_objS; }
+int getContratF(void) { return g_objF; }
+int getContratP(void) { return g_objP; }
+int getContratO(void) { return g_objO; }
+int getContratM(void) { return g_objM; }
+int getCoupsMax(void) { return g_coupsMax; }
+
+int getProgS(void) { return g_progS; }
+int getProgF(void) { return g_progF; }
+int getProgP(void) { return g_progP; }
+int getProgO(void) { return g_progO; }
+int getProgM(void) { return g_progM; }
+int getCoupsUtilises(void) { return g_coupsUtilises; }
+
+int isGameOver(void) { return g_gameOver; }
+
+
+
 
 // --- Fonctions d’accès à l’état de sélection ---
 int getSelectionEtat() {
@@ -21,6 +70,52 @@ int getSelectionX() {
 
 int getSelectionY() {
     return selY;
+}
+
+void resetSelection() {
+    estSelectionne = 0;
+    tentativeActive = 0;
+    selX = selY = tmpX = tmpY = -1;
+}
+
+// =============================
+// Fonction interne : appliquer un coup
+// compte les coups et fait respecter les regles du jeu
+// =============================
+
+static void appliquerCoupApresPermutation(char plateau[LIGNES][COLONNES]) {
+    int mask[LIGNES][COLONNES];
+    int nbCases = TrouverGroupesSimples(plateau, mask);
+
+    // On compte le coup même si aucun groupe n'est formé
+    g_coupsUtilises++;
+
+    if (nbCases > 0) {
+        int nbS = 0, nbF = 0, nbP = 0, nbO = 0, nbM = 0;
+
+        // Compter combien de S/F/P/O/M vont être mangés
+        CompterFruitsSupprimes(plateau, mask, &nbS, &nbF, &nbP, &nbO, &nbM);
+
+        g_progS += nbS;
+        g_progF += nbF;
+        g_progP += nbP;
+        g_progO += nbO;
+        g_progM += nbM;
+
+        // Supprimer et appliquer la gravité (avec animation + refresh)
+        Suppression(plateau, mask);
+        Gravite(plateau);
+    } else {
+        // Aucun groupe formé
+        afficherMessage("Aucun groupe forme.");
+        refreshScreen(plateau);  // pour mettre à jour coups utilisés
+    }
+
+    // Vérification fin de partie (défaite simple : plus de coups)
+    if (g_coupsUtilises >= g_coupsMax) {
+        g_gameOver = 1;
+        afficherMessage("DEFAITE : tu as utilise tous tes coups !");
+    }
 }
 
 void gererSelection(char plateau[LIGNES][COLONNES], int x, int y) {
@@ -40,12 +135,17 @@ void gererSelection(char plateau[LIGNES][COLONNES], int x, int y) {
         // -> remettre les deux cases en “non sélectionné” (maj), vider les états
         afficherSelection(plateau, selX, selY, 0);   // majuscule
         afficherSelection(plateau, tmpX, tmpY, 0);   // majuscule
+
+
         estSelectionne = 0;
         tentativeActive = 0;
         selX = selY = tmpX = tmpY = -1;
 
         gotoligcol(LIGNES + 4, 0);
         Color(VERT, NOIR); afficherMessage("Permutation validee."); Color(BLANC, NOIR);
+
+        appliquerCoupApresPermutation(plateau);
+
         return;
     }
 

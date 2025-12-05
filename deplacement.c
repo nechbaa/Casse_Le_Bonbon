@@ -79,7 +79,8 @@ void InitialiserCurseur(char plateau[LIGNES][COLONNES])
     afficherCurseur(curX, curY, plateau);
 }
 
-int deplacerCurseur(char plateau[LIGNES][COLONNES]) {
+// --- Déplacement + sélection ---
+void deplacerCurseur(char plateau[LIGNES][COLONNES]) {
     
 
         touche = getch();
@@ -91,7 +92,6 @@ int deplacerCurseur(char plateau[LIGNES][COLONNES]) {
         // --- On efface toujours le curseur avant de bouger ---
         effacerCurseur(curX, curY, plateau);
 
-        // --- Gestion des directions ---
         switch (touche) {
             case 'z': case 'Z': case 72:
                 if (curY > 0) newY--;
@@ -110,12 +110,11 @@ int deplacerCurseur(char plateau[LIGNES][COLONNES]) {
                 break;
         }
 
-         // --- Gestion spéciale si un fruit est sélectionné ---
         if (getSelectionEtat()) {
             int selX = getSelectionX();
             int selY = getSelectionY();
             int distance = abs(newX - selX) + abs(newY - selY);
-        
+
             if (distance == 0 || distance == 1) {
                 gererDeplacementAvecSelection(plateau, curX, curY, newX, newY);
                 curX = newX; curY = newY;
