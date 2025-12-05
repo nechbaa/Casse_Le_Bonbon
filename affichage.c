@@ -1,7 +1,6 @@
 #include "affichage.h"
 #include <stdarg.h>
 #include <time.h>
-#include <windows.h>
 
 // --- Fonction pour changer la couleur du texte ---
 static inline void Color(int texte, int fond) {
