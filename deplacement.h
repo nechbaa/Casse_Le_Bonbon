@@ -5,6 +5,10 @@
 #include <conio.h>    // getch()
 #include "affichage.h"
 
+int curX, curY;
+char touche;
+
+
 // Fonctions principales
 void afficherCurseur(int x, int y, char plateau[LIGNES][COLONNES]);
 void effacerCurseur(int x, int y, char plateau[LIGNES][COLONNES]);

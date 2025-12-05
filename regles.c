@@ -1,6 +1,6 @@
+#include <stdio.h>
 #include "affichage.h"  // pour LIGNES, COLONNES
 #include "regles.h"
-#include <stdio.h>
 #define VIDE '.'   // definition claire du caractère représentant une case vide
 
 // --- Génère un item aléatoire parmi {S,F,P,O,M}
@@ -28,22 +28,43 @@ int Suppression(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
 }
 
 
-void Gravite(char plateau[LIGNES][COLONNES]) {
-    for (int col = 0; col < COLONNES; col++) {
-        int write = LIGNES - 1;     // position d'écriture depuis le bas
+// --- Gravité ANIMÉE : les fruits descendent petit à petit ---
+void Gravite(char plateau[LIGNES][COLONNES], int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax)
+{
+    int moved;
 
-        // 1) Descendre tous les items non vides
-        for (int row = LIGNES - 1; row >= 0; row--) {
-            if (plateau[row][col] != VIDE) {
-                plateau[write][col] = plateau[row][col];
-                write--;
+    // 1) Faire tomber les fruits petit à petit
+    do {
+        moved = 0;
+
+        for (int col = 0; col < COLONNES; col++) {
+            for (int row = LIGNES - 1; row > 0; row--) {
+                if (plateau[row][col] == VIDE && plateau[row - 1][col] != VIDE) {
+                    plateau[row][col]     = plateau[row - 1][col];
+                    plateau[row - 1][col] = VIDE;
+                    moved = 1;
+                }
             }
         }
 
-        // 2) Remplir le haut avec du random
-        for (int row = write; row >= 0; row--) {
-            plateau[row][col] = randItem();
+        if (moved) {
+            // On rafraîchit TOUT l'écran : plateau + contrat + messages
+            refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
+            Sleep(200);  // petite pause pour l'effet visuel
+        }
+
+    } while (moved);
+
+    // 2) Remplir les cases vides en haut avec des fruits aléatoires, animés aussi
+    for (int col = 0; col < COLONNES; col++) {
+        for (int row = 0; row < LIGNES; row++) {
+            if (plateau[row][col] == VIDE) {
+                plateau[row][col] = randItem();
+                refreshScreen(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
+                Sleep(200);
+            }
         }
     }
-
 }
+
+
