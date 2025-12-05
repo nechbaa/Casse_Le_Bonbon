@@ -4,11 +4,42 @@
 #include "deplacement.h"
 #include "groupes.h"
 #include "jeu.h"
+#include "menu.h"
 #include <stdio.h>
 
+void test1(void* userdata){
+    int* a = (int*)userdata;
+    printf("Valeur de a : %d\n", *a);
+}
 
+void test2(void* userdata){
+    printf("Test 2\n");
+}
+
+void test3(void* userdata){
+    printf("Test 3\n");
+}
 
 int main() {
+
+    int a = 2;
+
+    Menu mainMenu = create_menu(3);
+    menu_add_option(&mainMenu, "Nouvelle Partie", test1, &a);
+    menu_add_option(&mainMenu, "Options", test2, NULL);
+    menu_add_option(&mainMenu, "Quitter", test3, NULL);
+
+    while (1)
+    {
+        menu_run(&mainMenu);
+    }
+    
+    
+
+
+
+
+
 
     char plateau[LIGNES][COLONNES];
     int mask[LIGNES][COLONNES] = {0};
@@ -37,6 +68,12 @@ int main() {
 
     while (1)
     {
+        if(isGameOver()) {
+            afficherMessage("Défaite ! Appuyez sur une touche pour quitter.");
+            getch();
+            break;
+        }
+
         int supprimees = 0;
         /*while(TrouverGroupes(plateau,mask) > 0)
         {
