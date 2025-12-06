@@ -238,7 +238,7 @@ int main() {
     menu_add_option(&mainMenu, "Options", options, BLANC, NULL);
     menu_add_option(&mainMenu, "Quitter", quit, BLANC, NULL);
 
-    
+    //PlaySound(TEXT("musique.wav"), NULL, SND_FILENAME | SND_ASYNC);
 
     int boucle = 1;
 
