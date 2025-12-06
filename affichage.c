@@ -1,103 +1,98 @@
 #include "affichage.h"
-#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
+#include <stdarg.h>
 
 // --- Fonction pour changer la couleur du texte ---
-static inline void Color(int texte, int fond) {
-    static HANDLE H = NULL;
-    if (!H) H = GetStdHandle(STD_OUTPUT_HANDLE); // évite de rappeler GetStdHandle à chaque fois
-    SetConsoleTextAttribute(H, (fond << 4) | texte);
+void Color(int texte, int fond) {
+    printf("\033[%d;%dm", texte, fond + 10); // séquence ANSI
 }
+
 // --- Fonction pour déplacer le curseur ---
-static inline void gotoligcol(int lig, int col) {
-    COORD mycoord = { (SHORT)col, (SHORT)lig };
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), mycoord);
+void gotoligcol(int lig, int col) {
+    printf("\033[%d;%dH", lig + 1, col + 1);
 }
+
 // --- Initialisation aléatoire du plateau ---
 void initialiserPlateau(char plateau[LIGNES][COLONNES]) {
-    static const char items[] = {'S', 'F', 'P', 'O', 'M'};
-    srand((unsigned)time(NULL));
+    char items[5] = {'S','F','P','O','M'};
+    srand(time(NULL));
 
     for (int i = 0; i < LIGNES; i++) {
         for (int j = 0; j < COLONNES; j++) {
-            plateau[i][j] = items[rand() % (sizeof(items)/sizeof(items[0]))];
+            int r = rand() % 5;
+            plateau[i][j] = items[r];
         }
     }
 }
 
-// --- Affichage coloré du plateau ---
+// --- Affichage du plateau ---
 void afficherPlateau(char plateau[LIGNES][COLONNES]) {
-    system("cls"); // nettoyage console
+    printf("\033[2J\033[H"); // efface l’écran
 
-    // Bordure supérieure
-    putchar(0xC9);
-    for (int j = 0; j < COLONNES; j++) putchar(0xCD);
-    putchar(0xBB);
-    putchar('\n');
+    // Bordure haut
+    printf("%c", 0xC9);
+    for (int j = 0; j < COLONNES; j++) printf("%c", 0xCD);
+    printf("%c\n", 0xBB);
 
-    // Corps du plateau
+    // Corps
     for (int i = 0; i < LIGNES; i++) {
-        putchar(0xBA);
+        printf("%c", 0xBA);
         for (int j = 0; j < COLONNES; j++) {
-            switch (plateau[i][j]) {
-                case 'S': Color(JAUNE, NOIR); break;
-                case 'F': Color(ROUGE, NOIR); break;
-                case 'P': Color(VERT, NOIR); break;
-                case 'O': Color(CYAN, NOIR); break;
-                case 'M': Color(MAGENTA, NOIR); break;
-                default:  Color(BLANC, NOIR); break;
-            }
-            putchar(plateau[i][j]);
+            if (plateau[i][j] == 'S') Color(33, 40); 
+            else if (plateau[i][j] == 'F') Color(31, 40); 
+            else if (plateau[i][j] == 'P') Color(32, 40); 
+            else if (plateau[i][j] == 'O') Color(36, 40); 
+            else if (plateau[i][j] == 'M') Color(35, 40); 
+            else Color(37, 40); // Blanc
+
+            printf("%c", plateau[i][j]);
         }
-        Color(BLANC, NOIR);
-        putchar(0xBA);
-        putchar('\n');
+        Color(37, 40);
+        printf("%c\n", 0xBA);
     }
 
-    // Bordure inférieure
-    putchar(0xC8);
-    for (int j = 0; j < COLONNES; j++) putchar(0xCD);
-    putchar(0xBC);
+    // Bordure bas
+    printf("%c", 0xC8);
+    for (int j = 0; j < COLONNES; j++) printf("%c", 0xCD);
+    printf("%c", 0xBC);
 }
+
 // --- Affichage du contrat ---
 void afficherContrat(int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) {
-    Color(BLANC, NOIR);
+    Color(37, 40);
     gotoligcol(1, COLONNES + 5);
     printf("=== CONTRAT ===");
 
-    const char* labels[] = {
-        "Soleils   (S) : %d",
-        "Fraises   (F) : %d",
-        "Pommes    (P) : %d",
-        "Oignons   (O) : %d",
-        "Mandarines(M) : %d"
-    };
-    int values[] = { nbS, nbF, nbP, nbO, nbM };
+    gotoligcol(3, COLONNES + 5); printf("Soleils   (S) : %d", nbS);
+    gotoligcol(4, COLONNES + 5); printf("Fraises   (F) : %d", nbF);
+    gotoligcol(5, COLONNES + 5); printf("Pommes    (P) : %d", nbP);
+    gotoligcol(6, COLONNES + 5); printf("Oignons   (O) : %d", nbO);
+    gotoligcol(7, COLONNES + 5); printf("Mandarines(M) : %d", nbM);
 
-    for (int i = 0; i < 5; i++) {
-        gotoligcol(3 + i, COLONNES + 5);
-        printf(labels[i], values[i]);
-    }
+    gotoligcol(9, COLONNES + 5);
+    printf("Coups max : %d", coupsMax);
+    Color(37, 40);
+}
 
-    // --- Effacer message ---
+// --- Effacer message ---
 void effacerMessage(void) {
     gotoligcol(LIGNES + 4, 0);
-    printf("%*s", 100, ""); // efface 100 caractères
+    printf("                                                                                                    ");
 }
+
 // --- Afficher message ---
 void afficherMessage(const char* fmt, ...) {
     effacerMessage();
     gotoligcol(LIGNES + 4, 0);
-    va_list ap; va_start(ap, fmt);
+    va_list ap;
+    va_start(ap, fmt);
     vprintf(fmt, ap);
     va_end(ap);
-    Color(BLANC, NOIR);
+    Color(37, 40);
 }
-    
-    gotoligcol(9, COLONNES + 5);
-    printf("Coups max : %d", coupsMax);
-    Color(BLANC, NOIR);
-}
+
 // --- Rafraîchir écran ---
 void refreshScreen(char plateau[LIGNES][COLONNES],
                    int nbS, int nbF, int nbP, int nbO, int nbM, int coupsMax) {
@@ -105,6 +100,6 @@ void refreshScreen(char plateau[LIGNES][COLONNES],
     afficherContrat(nbS, nbF, nbP, nbO, nbM, coupsMax);
 
     gotoligcol(LIGNES + 3, 0);
-    Color(BLANC, NOIR);
-    puts("Utilise Z Q S D pour te deplacer, ESPACE pour selectionner, ECHAP pour quitter.");
+    Color(37, 40);
+    printf("Utilise Z Q S D pour te deplacer, ESPACE pour selectionner, ECHAP pour quitter.\n");
 }
