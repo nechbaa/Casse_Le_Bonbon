@@ -36,7 +36,7 @@ void menu_display(Menu *m, int posX, int posY) {
 }
 
 // Affichage du menu + gestion inputs
-void menu_run(Menu *m, int posX, int posY) {
+int menu_run(Menu *m, int posX, int posY) {
     menu_display(m, posX, posY);
 
     while (1) {
@@ -53,8 +53,10 @@ void menu_run(Menu *m, int posX, int posY) {
                 m->selected = 0;
         }
         else if (c == ' ') {  // espace = valider
-            if (m->options[m->selected].callback)
-                m->options[m->selected].callback(m->options[m->selected].userdata);
+            if (m->options[m->selected].callback){
+                int result = m->options[m->selected].callback(m->options[m->selected].userdata);
+                return result;
+            }
             break;
         }
 

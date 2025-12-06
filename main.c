@@ -5,19 +5,19 @@
 #include "groupes.h"
 #include "jeu.h"
 #include "menu.h"
+#include "highscore.h"
 #include <stdio.h>
 
-void options(void* userdata){
+int options(void* userdata){
     //int* a = (int*)userdata;
     //printf("Valeur de a : %d\n", *a);
     printf("Test 1\n");
+    return 1;
 }
 
-void optionsDeJeu(void* userdata){
-    printf("Test 2\n");
-}
 
-void jouer(void* userdata){
+
+int jouer(void* userdata){
     char plateau[LIGNES][COLONNES];
     int mask[LIGNES][COLONNES] = {0};
 
@@ -43,7 +43,7 @@ void jouer(void* userdata){
     while (1)
     {
         if(isGameOver()) {
-            afficherMessage("Défaite ! Appuyez sur une touche pour quitter.");
+            afficherMessage("Defaite ! Appuyez sur une touche pour quitter.");
             getch();
             break;
         }
@@ -53,10 +53,29 @@ void jouer(void* userdata){
         if(deplacerCurseur(plateau) == 1) break;
     }
     
+    return 0;
 }
 
-void quit(void* userdata){
-    printf("Test 3\n");
+int optionsDeJeu(void* userdata){
+    printf("\nEntrez votre nom : ");
+    char player_name[100];
+    scanf("%99s", player_name);
+    Sleep(300);
+
+    return jouer(player_name);
+}
+
+int leaderboard(void* userdata){
+    
+    printAllScores("highscores.txt");
+
+    getch();
+
+    return 1;
+}
+
+int quit(void* userdata){
+    return 0;
 }
 
 int main() {
@@ -64,15 +83,31 @@ int main() {
     system("cls");
 
 
-    Menu mainMenu = create_menu(3);
+    Menu mainMenu = create_menu(4);
     menu_add_option(&mainMenu, "Nouvelle Partie", optionsDeJeu, NULL);
+    menu_add_option(&mainMenu, "Leaderboard", leaderboard, NULL);
     menu_add_option(&mainMenu, "Options", options, NULL);
     menu_add_option(&mainMenu, "Quitter", quit, NULL);
 
     printf("=== MENU PRINCIPAL ===");
 
-    menu_run(&mainMenu, 0, 3);
-    
+    int boucle = 1;
+
+    while (boucle)
+    {
+        boucle = 0;
+
+        int result = menu_run(&mainMenu, 0, 2);
+        switch (result)
+        {
+        case 1:
+            boucle = 1;
+            break;
+        
+        default:
+            break;
+        }
+    }
         
     gotoligcol(LIGNES + 5, 0);
 

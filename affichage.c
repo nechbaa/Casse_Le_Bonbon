@@ -155,3 +155,12 @@ void refreshScreen(char plateau[LIGNES][COLONNES])
     Color(BLANC, NOIR);
     printf("Utilise Z Q S D pour te deplacer, ESPACE pour selectionner, ECHAP pour quitter.\n");
 }
+
+void cleanArea(int x1, int x2, int y1, int y2) {
+    for (int i = y1; i <= y2; i++) {
+        gotoligcol(i, x1);
+        for (int j = x1; j <= x2; j++) {
+            printf(" ");
+        }
+    }
+}

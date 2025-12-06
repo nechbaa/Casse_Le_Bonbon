@@ -20,6 +20,24 @@ int getHighscore(const char *filename, const char *player_name) {
     return -1; // Joueur introuvable
 }
 
+void printAllScores(const char *filename) {
+    FILE *file = fopen(filename, "r");
+    if (!file) {
+        printf("\nAucun score pour le moment\n");
+        return;
+    }
+
+    char name[100];
+    int score;
+
+    printf("\n=== Classement des Scores ===\n");
+    while (fscanf(file, "%99s %d", name, &score) == 2) {
+        printf("%s : %d\n", name, score);
+    }
+
+    fclose(file);
+}
+
 void update_highscore(const char *filename, const char *player_name, int new_score) {
     FILE *file = fopen(filename, "r");
     FILE *temp = fopen("temp.txt", "w");

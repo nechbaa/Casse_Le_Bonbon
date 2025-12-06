@@ -37,4 +37,6 @@ void afficherMessage(const char* fmt, ...);
 
 void refreshScreen(char plateau[LIGNES][COLONNES]);
 
+void cleanArea(int x1, int x2, int y1, int y2);
+
 #endif
