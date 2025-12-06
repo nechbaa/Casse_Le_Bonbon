@@ -7,40 +7,13 @@
 #include "menu.h"
 #include <stdio.h>
 
-void test1(void* userdata){
-    int* a = (int*)userdata;
-    printf("Valeur de a : %d\n", *a);
+void options(void* userdata){
+    //int* a = (int*)userdata;
+    //printf("Valeur de a : %d\n", *a);
+    printf("Test 1\n");
 }
 
-void test2(void* userdata){
-    printf("Test 2\n");
-}
-
-void test3(void* userdata){
-    printf("Test 3\n");
-}
-
-int main() {
-
-    int a = 2;
-
-    Menu mainMenu = create_menu(3);
-    menu_add_option(&mainMenu, "Nouvelle Partie", test1, &a);
-    menu_add_option(&mainMenu, "Options", test2, NULL);
-    menu_add_option(&mainMenu, "Quitter", test3, NULL);
-
-    while (1)
-    {
-        menu_run(&mainMenu);
-    }
-    
-    
-
-
-
-
-
-
+void jouer(void* userdata){
     char plateau[LIGNES][COLONNES];
     int mask[LIGNES][COLONNES] = {0};
 
@@ -63,9 +36,6 @@ int main() {
     refreshScreen(plateau);
     Sleep(1000);
    
-
-    
-
     while (1)
     {
         if(isGameOver()) {
@@ -75,17 +45,31 @@ int main() {
         }
 
         int supprimees = 0;
-        /*while(TrouverGroupes(plateau,mask) > 0)
-        {
-            int a = TrouverGroupes(plateau,mask);
-            gotoligcol(LIGNES + 5, 0);
-            printf("Groupes trouves : %d\n", a);
-            supprimees += Suppression(plateau, mask);
-            Gravite(plateau, nbS, nbF, nbP, nbO, nbM, coupsMax);
-        }*/
+        
         if(deplacerCurseur(plateau) == 1) break;
     }
     
+}
+
+void quit(void* userdata){
+    printf("Test 3\n");
+}
+
+int main() {
+
+    system("cls");
+
+
+    Menu mainMenu = create_menu(3);
+    menu_add_option(&mainMenu, "Nouvelle Partie", jouer, NULL);
+    menu_add_option(&mainMenu, "Options", options, NULL);
+    menu_add_option(&mainMenu, "Quitter", quit, NULL);
+
+    printf("=== MENU PRINCIPAL ===");
+
+    menu_run(&mainMenu, 0, 3);
+    
+        
     gotoligcol(LIGNES + 5, 0);
 
     return 0;

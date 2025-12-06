@@ -18,8 +18,8 @@ typedef struct {
 
 Menu create_menu(int capacity);
 void menu_add_option(Menu *m, const char *label, menu_callback_t cb, void *userdata);
-void menu_display(Menu *m);
-void menu_run(Menu *m);
+void menu_display(Menu *m, int posX, int posY);
+void menu_run(Menu *m, int posX, int posY);
 
 
 #endif

@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <conio.h>
 #include "menu.h"
+#include "affichage.h"
 
 
 Menu create_menu(int capacity) {
@@ -21,10 +22,11 @@ void menu_add_option(Menu *m, const char *label, menu_callback_t cb, void *userd
 }
 
 
-void menu_display(Menu *m) {
-    system("cls"); // sous Windows -> "cls"
+void menu_display(Menu *m, int posX, int posY) {
+    //system("cls"); // sous Windows -> "cls"
 
     for (int i = 0; i < m->count; i++) {
+        gotoligcol(posY + i, posX);
         if (i == m->selected)
             printf(" > %s\n", m->options[i].label);
         else
@@ -32,8 +34,8 @@ void menu_display(Menu *m) {
     }
 }
 
-void menu_run(Menu *m) {
-    menu_display(m);
+void menu_run(Menu *m, int posX, int posY) {
+    menu_display(m, posX, posY);
 
     while (1) {
         int c = getch();
@@ -54,7 +56,7 @@ void menu_run(Menu *m) {
             break;
         }
 
-        menu_display(m);
+        menu_display(m, posX, posY);
     }
 }
 
