@@ -16,8 +16,14 @@
 #define CYAN 3
 #define ROUGE 4
 #define MAGENTA 5
+#define JAUNE_FONCE 6
 #define GRIS_CLAIR 7
 #define GRIS_FONCE 8
+#define BLEU_CLAIR 9
+#define VERT_CLAIR 10
+#define CYAN_CLAIR 11
+#define ROUGE_CLAIR 12
+#define ROSE 13
 #define JAUNE 14
 #define BLANC 15
 

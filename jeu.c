@@ -57,7 +57,10 @@ int getCoupsUtilises(void) { return g_coupsUtilises; }
 
 int isGameOver(void) { return g_gameOver; }
 
-
+int getScoreTotal(void) {
+    // somme des fruits mangés
+    return g_progS + g_progF + g_progP + g_progO + g_progM;
+}
 
 
 // --- Fonctions d’accès à l’état de sélection ---
@@ -221,6 +224,18 @@ void gererDeplacementAvecSelection(char plateau[LIGNES][COLONNES],int oldX, int 
         return;
     }
 
+}
+
+
+int checkVictory(void) {
+    if (getProgS() >= getContratS() &&
+        getProgF() >= getContratF() &&
+        getProgP() >= getContratP() &&
+        getProgO() >= getContratO() &&
+        getProgM() >= getContratM()) {
+            return 1;
+    }
+    return 0;
 }
 
 

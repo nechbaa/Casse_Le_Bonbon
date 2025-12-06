@@ -20,8 +20,41 @@ int getHighscore(const char *filename, const char *player_name) {
     return -1; // Joueur introuvable
 }
 
-void printAllScores(const char *filename) {
+void printBestScores(const char *filename, int amount) {
     FILE *file = fopen(filename, "r");
+    if (!file) {
+        printf("\nAucun score disponible.\n");
+        return;
+    }
+
+    ScoreEntry scores[100];
+    int count = 0;
+
+    while (fscanf(file, "%99s %d", scores[count].name, &scores[count].score) == 2) {
+        count++;
+    }
+    fclose(file);
+
+    // Tri des scores
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = i + 1; j < count; j++) {
+            if (scores[j].score > scores[i].score) {
+                ScoreEntry temp = scores[i];
+                scores[i] = scores[j];
+                scores[j] = temp;
+            }
+        }
+    }
+
+    printf("\n=== Meilleurs Scores ===\n");
+    for (int i = 0; i < count && i < amount; i++) {
+        printf("%d. %s : %d\n", i + 1, scores[i].name, scores[i].score);
+    }
+}
+
+/*
+
+FILE *file = fopen(filename, "r");
     if (!file) {
         printf("\nAucun score pour le moment\n");
         return;
@@ -36,7 +69,8 @@ void printAllScores(const char *filename) {
     }
 
     fclose(file);
-}
+
+*/
 
 void update_highscore(const char *filename, const char *player_name, int new_score) {
     FILE *file = fopen(filename, "r");

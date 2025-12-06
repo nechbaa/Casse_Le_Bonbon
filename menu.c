@@ -52,7 +52,7 @@ int menu_run(Menu *m, int posX, int posY) {
             if (m->selected >= m->count)
                 m->selected = 0;
         }
-        else if (c == ' ') {  // espace = valider
+        else if (c == ' ' || c == 13) {  // espace/entrée = valider
             if (m->options[m->selected].callback){
                 int result = m->options[m->selected].callback(m->options[m->selected].userdata);
                 return result;

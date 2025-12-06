@@ -12,6 +12,11 @@ int options(void* userdata){
     //int* a = (int*)userdata;
     //printf("Valeur de a : %d\n", *a);
     printf("Test 1\n");
+
+    getch();
+
+    cleanArea(0, 40, 6, 20);
+
     return 1;
 }
 
@@ -43,15 +48,33 @@ int jouer(void* userdata){
     while (1)
     {
         if(isGameOver()) {
+            Color(ROUGE_CLAIR, NOIR);
             afficherMessage("Defaite ! Appuyez sur une touche pour quitter.");
             getch();
             break;
         }
 
-        int supprimees = 0;
+        if(checkVictory()) {
+            Color(VERT_CLAIR, NOIR);
+            afficherMessage("Victoire ! Appuyez sur une touche pour quitter.");
+            getch();
+            break;
+        }
         
         if(deplacerCurseur(plateau) == 1) break;
     }
+
+    int totalScore = getScoreTotal();
+    char* player_name = (char*)userdata;
+    int previousHighscore = getHighscore("highscores.txt", player_name);
+    if (totalScore > previousHighscore) {
+        update_highscore("highscores.txt", player_name, totalScore);
+        afficherMessage("Nouveau record ! Score : %d. Appuyez sur une touche pour quitter.", totalScore);
+    } else {
+        afficherMessage("Score final : %d. Appuyez sur une touche pour quitter.", totalScore);
+    }
+
+    getch();
     
     return 0;
 }
@@ -67,9 +90,11 @@ int optionsDeJeu(void* userdata){
 
 int leaderboard(void* userdata){
     
-    printAllScores("highscores.txt");
+    printBestScores("highscores.txt", 3);
 
     getch();
+
+    cleanArea(0, 40, 6, 20);
 
     return 1;
 }
@@ -81,7 +106,7 @@ int quit(void* userdata){
 int main() {
 
     system("cls");
-
+    Color(BLANC, NOIR);
 
     Menu mainMenu = create_menu(4);
     menu_add_option(&mainMenu, "Nouvelle Partie", optionsDeJeu, NULL);
