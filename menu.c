@@ -4,7 +4,7 @@
 #include "menu.h"
 #include "affichage.h"
 
-
+// Création d'un menu vide avec une capacité donnée
 Menu create_menu(int capacity) {
     Menu m;
     m.options = malloc(sizeof(MenuOption) * capacity);
@@ -13,6 +13,7 @@ Menu create_menu(int capacity) {
     return m;
 }
 
+// Ajout d'une option au menu
 void menu_add_option(Menu *m, const char *label, menu_callback_t cb, void *userdata)
 {
     m->options[m->count].label = strdup(label);
@@ -21,7 +22,7 @@ void menu_add_option(Menu *m, const char *label, menu_callback_t cb, void *userd
     m->count++;
 }
 
-
+// Affichage du menu à une position donnée
 void menu_display(Menu *m, int posX, int posY) {
     //system("cls"); // sous Windows -> "cls"
 
@@ -34,6 +35,7 @@ void menu_display(Menu *m, int posX, int posY) {
     }
 }
 
+// Affichage du menu + gestion inputs
 void menu_run(Menu *m, int posX, int posY) {
     menu_display(m, posX, posY);
 

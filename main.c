@@ -13,6 +13,10 @@ void options(void* userdata){
     printf("Test 1\n");
 }
 
+void optionsDeJeu(void* userdata){
+    printf("Test 2\n");
+}
+
 void jouer(void* userdata){
     char plateau[LIGNES][COLONNES];
     int mask[LIGNES][COLONNES] = {0};
@@ -61,7 +65,7 @@ int main() {
 
 
     Menu mainMenu = create_menu(3);
-    menu_add_option(&mainMenu, "Nouvelle Partie", jouer, NULL);
+    menu_add_option(&mainMenu, "Nouvelle Partie", optionsDeJeu, NULL);
     menu_add_option(&mainMenu, "Options", options, NULL);
     menu_add_option(&mainMenu, "Quitter", quit, NULL);
 

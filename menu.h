@@ -1,6 +1,7 @@
 #ifndef MENU_H
 #define MENU_H
 
+// Définition du type de fonction de rappel pour les options de menu
 typedef void (*menu_callback_t)(void *userdata);
 
 typedef struct {
