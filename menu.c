@@ -2,8 +2,9 @@
 #include <windows.h>
 #include <conio.h>
 #include "menu.h"
+#include "affichage.h"
 
-
+// Création d'un menu vide avec une capacité donnée
 Menu create_menu(int capacity) {
     Menu m;
     m.options = malloc(sizeof(MenuOption) * capacity);
@@ -12,19 +13,23 @@ Menu create_menu(int capacity) {
     return m;
 }
 
-void menu_add_option(Menu *m, const char *label, menu_callback_t cb, void *userdata)
+// Ajout d'une option au menu
+void menu_add_option(Menu *m, const char *label, menu_callback_t cb, int color, void *userdata)
 {
     m->options[m->count].label = strdup(label);
     m->options[m->count].callback = cb;
+    m->options[m->count].color = color;
     m->options[m->count].userdata = userdata;
     m->count++;
 }
 
-
-void menu_display(Menu *m) {
-    system("cls"); // sous Windows -> "cls"
+// Affichage du menu à une position donnée
+void menu_display(Menu *m, int posX, int posY) {
+    //system("cls"); // sous Windows -> "cls"
 
     for (int i = 0; i < m->count; i++) {
+        gotoligcol(posY + i, posX);
+        Color(m->options[i].color, NOIR);
         if (i == m->selected)
             printf(" > %s\n", m->options[i].label);
         else
@@ -32,8 +37,9 @@ void menu_display(Menu *m) {
     }
 }
 
-void menu_run(Menu *m) {
-    menu_display(m);
+// Affichage du menu + gestion inputs
+int menu_run(Menu *m, int posX, int posY) {
+    menu_display(m, posX, posY);
 
     while (1) {
         int c = getch();
@@ -48,13 +54,15 @@ void menu_run(Menu *m) {
             if (m->selected >= m->count)
                 m->selected = 0;
         }
-        else if (c == ' ') {  // espace = valider
-            if (m->options[m->selected].callback)
-                m->options[m->selected].callback(m->options[m->selected].userdata);
+        else if (c == ' ' || c == 13) {  // espace/entrée = valider
+            if (m->options[m->selected].callback){
+                int result = m->options[m->selected].callback(m->options[m->selected].userdata);
+                return result;
+            }
             break;
         }
 
-        menu_display(m);
+        menu_display(m, posX, posY);
     }
 }
 

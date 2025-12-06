@@ -94,12 +94,12 @@ void afficherProgression(void) {
     gotoligcol(1, COLONNES + 5);
     printf("=== PROGRESSION ===");
 
-    gotoligcol(3, COLONNES + 5); printf("Soleils   (S) : %d", pS);
-    gotoligcol(4, COLONNES + 5); printf("Fraises   (F) : %d", pF);
-    gotoligcol(5, COLONNES + 5); printf("Pommes    (P) : %d", pP);
-    gotoligcol(6, COLONNES + 5); printf("Oignons   (O) : %d", pO);
-    gotoligcol(7, COLONNES + 5); printf("Mandarines(M) : %d", pM);
-    gotoligcol(9, COLONNES + 5); printf("Coups joues : %d", coups);
+    gotoligcol(3, COLONNES + 5); Color((pS < getContratS() ? BLANC : VERT), NOIR); printf("Soleils   (S) : %d", pS);
+    gotoligcol(4, COLONNES + 5); Color((pF < getContratF() ? BLANC : VERT), NOIR); printf("Fraises   (F) : %d", pF);
+    gotoligcol(5, COLONNES + 5); Color((pP < getContratP() ? BLANC : VERT), NOIR); printf("Pommes    (P) : %d", pP);
+    gotoligcol(6, COLONNES + 5); Color((pO < getContratO() ? BLANC : VERT), NOIR); printf("Oignons   (O) : %d", pO);
+    gotoligcol(7, COLONNES + 5); Color((pM < getContratM() ? BLANC : VERT), NOIR); printf("Mandarines(M) : %d", pM);
+    gotoligcol(9, COLONNES + 5); Color(BLANC, NOIR); printf("Coups joues : %d", coups);
 
     Color(BLANC, NOIR);
 }
@@ -144,14 +144,40 @@ void afficherMessage(const char* fmt, ...) {
 }
 
 
+void afficherVies() {
+    
+    gotoligcol(11, COLONNES + 5);
+
+    int vies = getViesRestante();
+    int viesTotal = getVies();
+    
+    for (int i = 0; i < viesTotal; i++)
+    {
+        Color(i < vies ? ROUGE_CLAIR : GRIS_FONCE, NOIR);
+        printf("<3 ");
+    }
+    Color(BLANC, NOIR);
+}
+
+
 // --- Fonction utilitaire : rafraîchir entièrement l'écran ---
 void refreshScreen(char plateau[LIGNES][COLONNES])
 {
     afficherPlateau(plateau);
     afficherProgression();
     afficherContrat();
+    afficherVies();
 
     gotoligcol(LIGNES + 3, 0);
     Color(BLANC, NOIR);
     printf("Utilise Z Q S D pour te deplacer, ESPACE pour selectionner, ECHAP pour quitter.\n");
+}
+
+void cleanArea(int x1, int x2, int y1, int y2) {
+    for (int i = y1; i <= y2; i++) {
+        gotoligcol(i, x1);
+        for (int j = x1; j <= x2; j++) {
+            printf(" ");
+        }
+    }
 }

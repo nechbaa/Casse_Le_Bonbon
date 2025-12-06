@@ -33,5 +33,15 @@ int  getProgM(void);
 int  getCoupsUtilises(void);
 
 int  isGameOver(void);   // 1 si partie terminée (défaite ou victoire), 0 sinon
+int  getScoreTotal(void);
+
+int  getVies(void);
+int  getViesRestante(void);
+int  perdreVie(void);
+
+void resetVies(void);
+
+// --- Vérification de victoire ---
+int  checkVictory(void);
 
 #endif
