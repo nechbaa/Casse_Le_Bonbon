@@ -144,12 +144,29 @@ void afficherMessage(const char* fmt, ...) {
 }
 
 
+void afficherVies() {
+    
+    gotoligcol(11, COLONNES + 5);
+
+    int vies = getViesRestante();
+    int viesTotal = getVies();
+    
+    for (int i = 0; i < viesTotal; i++)
+    {
+        Color(i < vies ? ROUGE_CLAIR : GRIS_FONCE, NOIR);
+        printf("<3 ");
+    }
+    Color(BLANC, NOIR);
+}
+
+
 // --- Fonction utilitaire : rafraîchir entièrement l'écran ---
 void refreshScreen(char plateau[LIGNES][COLONNES])
 {
     afficherPlateau(plateau);
     afficherProgression();
     afficherContrat();
+    afficherVies();
 
     gotoligcol(LIGNES + 3, 0);
     Color(BLANC, NOIR);

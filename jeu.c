@@ -27,6 +27,10 @@ static int g_coupsUtilises = 0;
 // Indicateur de fin de partie
 static int g_gameOver = 0;
 
+// Vies restantes
+static int g_viesRestantes;
+static int g_viesTotales = 3;
+
 
 // =====================
 // Getters état de jeu
@@ -57,6 +61,9 @@ int getCoupsUtilises(void) { return g_coupsUtilises; }
 
 int isGameOver(void) { return g_gameOver; }
 
+int getVies(void) { return g_viesTotales; }
+int getViesRestante(void) { return g_viesRestantes; }
+
 int getScoreTotal(void) {
     // somme des fruits mangés
     return g_progS + g_progF + g_progP + g_progO + g_progM;
@@ -74,6 +81,18 @@ int getSelectionX() {
 
 int getSelectionY() {
     return selY;
+}
+
+void resetVies() {
+    g_viesRestantes = g_viesTotales;
+}
+
+int perdreVie() {
+    if (g_viesRestantes > 0) {
+        g_viesRestantes--;
+        return 1; // Vie perdue
+    }
+    return 0; // Pas de vie perdu
 }
 
 void resetSelection() {

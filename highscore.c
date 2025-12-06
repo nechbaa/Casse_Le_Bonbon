@@ -52,27 +52,8 @@ void printBestScores(const char *filename, int amount) {
     }
 }
 
-/*
 
-FILE *file = fopen(filename, "r");
-    if (!file) {
-        printf("\nAucun score pour le moment\n");
-        return;
-    }
-
-    char name[100];
-    int score;
-
-    printf("\n=== Classement des Scores ===\n");
-    while (fscanf(file, "%99s %d", name, &score) == 2) {
-        printf("%s : %d\n", name, score);
-    }
-
-    fclose(file);
-
-*/
-
-void update_highscore(const char *filename, const char *player_name, int new_score) {
+void updateHighscore(const char *filename, const char *player_name, int new_score) {
     FILE *file = fopen(filename, "r");
     FILE *temp = fopen("temp.txt", "w");
 
@@ -100,6 +81,66 @@ void update_highscore(const char *filename, const char *player_name, int new_sco
     fclose(temp);
 
     // Remplacement du fichier original
+    remove(filename);
+    rename("temp.txt", filename);
+}
+
+
+int getUnlockedLevel(const char *filename, const char *player_name) {
+    FILE *file = fopen(filename, "r");
+    if (!file) return 1;  // Aucun fichier -> niveau 1 
+
+    char name[100];
+    int level;
+
+    while (fscanf(file, "%99s %d", name, &level) == 2) {
+        if (strcmp(name, player_name) == 0) {
+            fclose(file);
+            return level;
+        }
+    }
+
+    fclose(file);
+    return 1; // Joueur inconnu -> niveau 1
+}
+
+
+void updateUnlockedLevel(const char *filename, const char *player_name, int new_level) {
+
+    // Assure que le fichier existe
+    FILE *test = fopen(filename, "a");
+    if (!test) {
+        printf("Erreur : impossible de créer %s\n", filename);
+        return;
+    }
+    fclose(test);
+
+    FILE *file = fopen(filename, "r");
+    FILE *temp = fopen("temp.txt", "w");
+
+    char name[100];
+    int level;
+    int found = 0;
+
+    if (file) {
+        while (fscanf(file, "%99s %d", name, &level) == 2) {
+            if (strcmp(name, player_name) == 0) {
+                found = 1;
+                if (new_level > level)
+                    level = new_level; // On met à jour
+            }
+            fprintf(temp, "%s %d\n", name, level);
+        }
+        fclose(file);
+    }
+
+    // Si nouveau joueur -> ajout
+    if (!found) {
+        fprintf(temp, "%s %d\n", player_name, new_level);
+    }
+
+    fclose(temp);
+
     remove(filename);
     rename("temp.txt", filename);
 }

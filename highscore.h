@@ -8,6 +8,10 @@ typedef struct {
 
 int getHighscore(const char *filename, const char *player_name);
 void printBestScores(const char *filename, int amount);
-void update_highscore(const char *filename, const char *player_name, int new_score);
+void updateHighscore(const char *filename, const char *player_name, int new_score);
+
+int getUnlockedLevel(const char *filename, const char *player_name);
+void updateUnlockedLevel(const char *filename, const char *player_name, int new_level);
+
 
 #endif
