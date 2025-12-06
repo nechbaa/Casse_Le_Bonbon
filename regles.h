@@ -3,6 +3,7 @@
 
 #include "affichage.h"
 #define VIDE '.' 
+#define BOMBE_CHANCE 2  // pourcentage de chance d'obtenir une bombe lors du remplissage
 
 int  Suppression(char plateau[LIGNES][COLONNES], int mask[LIGNES][COLONNES]);
 char randItem(void);

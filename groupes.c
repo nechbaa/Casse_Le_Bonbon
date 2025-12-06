@@ -32,7 +32,54 @@ int TrouverGroupes(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
         i++;
     }
 
+    if(deleteAll[0] != '\0')
+    {
+        nbCases += exploserBombes(plateau, mask);
+    }
+
     // nbCases = nombre total de cases appartenant à un groupe (H ou V)
+    return nbCases;
+}
+
+
+int exploserBombes(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES])
+{
+    int nbCases = 0;
+    for (int i = 0; i < LIGNES; i++)
+    {
+        for (int j = 0; j < COLONNES; j++)
+        {
+            if(plateau[i][j] == 'B')
+            {
+                // marquer les cases dans un rayon autour de la bombe
+
+                float rayon = 2.5;
+
+                for (int di = - (int)rayon; di <= (int)rayon; di++)
+                {
+                    for (int dj = - (int)rayon; dj <= (int)rayon; dj++)
+                    {
+                        int ni = i + di;
+                        int nj = j + dj;
+
+                        // vérifier que la case est dans les limites du plateau
+                        if (ni >= 0 && ni < LIGNES && nj >= 0 && nj < COLONNES)
+                        {
+                            // vérifier que la case est dans le cercle de rayon
+                            if (di*di + dj*dj <= rayon*rayon)
+                            {
+                                if(mask[ni][nj] == 0)
+                                {
+                                    mask[ni][nj] = 1;
+                                    nbCases++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     return nbCases;
 }
 

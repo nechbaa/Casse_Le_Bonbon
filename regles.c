@@ -3,10 +3,12 @@
 #include "regles.h"
 #define VIDE '.'   // definition claire du caractère représentant une case vide
 
+
+
 // --- Génère un item aléatoire parmi {S,F,P,O,M}
 char randItem(void) {
-    const char t[5] = {'S','F','P','O','M'};
-    return t[rand() % 5];
+    const char t[6] = {'S','F','P','O','M','B'};
+    return t[((rand()%100 < BOMBE_CHANCE) ? 5 : (rand() % 5))];
 }
 
 //creation et initialisation du masque binaire de la meme taille que le plateau qui mes a 1 les cases quiq doivent etre supprimés 0 sinon

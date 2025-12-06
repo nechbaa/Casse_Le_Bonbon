@@ -132,7 +132,7 @@ int choixNiveau(char* player_name){
     Color(BLANC, NOIR);
     gotoligcol(0,0);
 
-    printf("Joueur %s : %d\n\n", player_name, maxScore);
+    printf("Joueur %s : %d\n\n", player_name, (maxScore < 0) ? 0 : maxScore);
     printf("Selection du niveau\n");
 
     

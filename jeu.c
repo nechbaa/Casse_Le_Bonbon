@@ -276,6 +276,7 @@ int permuterItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2
         case 'P': Color(VERT, NOIR); break;
         case 'O': Color(CYAN, NOIR); break;
         case 'M': Color(MAGENTA, NOIR); break;
+        case 'B': Color(ROSE, NOIR); break;
         default: Color(BLANC, NOIR); break;
     }
     printf("%c", plateau[y1][x1]);
@@ -287,6 +288,7 @@ int permuterItems(char plateau[LIGNES][COLONNES], int x1, int y1, int x2, int y2
         case 'P': Color(VERT, NOIR); break;
         case 'O': Color(CYAN, NOIR); break;
         case 'M': Color(MAGENTA, NOIR); break;
+        case 'B': Color(ROSE, NOIR); break;
         default: Color(BLANC, NOIR); break;
     }
     printf("%c", plateau[y2][x2]);

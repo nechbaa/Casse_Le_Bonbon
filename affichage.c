@@ -1,5 +1,6 @@
 #include "affichage.h"
 #include "jeu.h"
+#include "regles.h"
 #include <stdarg.h>
 
 // --- Fonction pour changer la couleur du texte ---
@@ -33,12 +34,19 @@ void initialiserPlateau(char plateau[LIGNES][COLONNES]) {
 
 // --- Remplissage du tableau avec le mask ---
 void remplirPlateau(char plateau[LIGNES][COLONNES], int mask[LIGNES][COLONNES]) {
-    char items[] = {'S', 'F', 'P', 'O', 'M'};
+    char items[] = {'S', 'F', 'P', 'O', 'M', 'B'}; 
 
     for (int i = 0; i < LIGNES; i++) {
         for (int j = 0; j < COLONNES; j++) {
-            if(mask[i][j] == 1)
+            if(mask[i][j] == 1){
                 plateau[i][j] = items[rand() % 5];
+
+
+                // Ajout possible d'une bombe
+                if ((rand()%100) < BOMBE_CHANCE) {
+                    plateau[i][j] = items[5]; // Bombe
+                }
+            }
         }
     }
 }
@@ -64,6 +72,7 @@ void afficherPlateau(char plateau[LIGNES][COLONNES]) {
                 case 'P': Color(VERT, NOIR); break;     // Pomme
                 case 'O': Color(CYAN, NOIR); break;     // Oignon
                 case 'M': Color(MAGENTA, NOIR); break;  // Mandarine
+                case 'B': Color(GRIS_CLAIR, NOIR); break;     // Bombe
                 default: Color(BLANC, NOIR); break;
             }
             printf("%c", plateau[i][j]);
