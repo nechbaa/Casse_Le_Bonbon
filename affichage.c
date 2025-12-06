@@ -6,7 +6,7 @@
 
 // --- Fonction pour changer la couleur du texte ---
 void Color(int texte, int fond) {
-    printf("\033[%d;%dm", texte, fond + 10); // séquence ANSI
+    printf("\033[%d;%dm", texte, fond + 10);
 }
 
 // --- Fonction pour déplacer le curseur ---
