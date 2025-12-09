@@ -35,6 +35,7 @@ void effacerCurseur(int x, int y, char plateau[LIGNES][COLONNES]) {
         case 'P': Color(VERT, NOIR); break;
         case 'O': Color(CYAN, NOIR); break;
         case 'M': Color(MAGENTA, NOIR); break;
+        case 'B': Color(GRIS_CLAIR, NOIR); break;     // Bombe
         default:  Color(BLANC, NOIR); break;
     }
     printf("%c", c);

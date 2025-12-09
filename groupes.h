@@ -17,4 +17,6 @@ int DeleteAllFruit(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES], ch
 
 void FillIfNotContain(char tab[5], char c);
 
+int exploserBombes(char plateau[LIGNES][COLONNES],int mask[LIGNES][COLONNES]);
+
 #endif
